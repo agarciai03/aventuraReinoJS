@@ -1,0 +1,94 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --primary-color: #77530aec;
+    --secondary-color: #f4e652;
+    --accent-color: #45b316;
+    --danger-color: rgb(206, 64, 38);
+}
+
+body {
+    background-color: white;
+    min-height: 100vh;
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    margin: 16px;
+    padding: 16px;
+}
+
+header {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.scene {
+    display: none;
+}
+
+.scene.active {
+    display: block;
+}
+
+#inventory-container {
+    background-color: var(--primary-color);
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 4px;
+    padding: 8px;
+    margin: 8px 20%;
+}
+
+.item {
+    background-color: var(--secondary-color);
+    height: 100px;
+    border: 1px solid black;
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 4px;
+}
+
+button {
+    padding: 12px 24px;
+    margin: 10px 5px;
+    background-color: var(--accent-color);
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+    border: none;
+    font-size: 16px;
+}
+
+.stats-box {
+    background-color: #f9f9f9;
+    padding: 15px;
+    border-radius: 5px;
+    margin: 15px 0;
+    border: 2px solid var(--primary-color);
+}
+
+.info-box {
+    background: var(--secondary-color);
+    padding: 15px;
+    border-radius: 5px;
+    margin: 15px 0;
+    border: 2px solid var(--primary-color);
+}
+
+h2,
+h3,
+h4 {
+    margin-bottom: 15px;
+    color: var(--primary-color);
+}
+
+#market-container,
+#enemies-container,
+#battles-container {
+    margin: 20px 0;
+}
