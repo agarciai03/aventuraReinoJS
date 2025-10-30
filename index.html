@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="style.css">
     <script src="script.js" defer></script>
-    <title>Aventura-reino</title>
+    <title>Aventura en el Reino de JS</title>
 </head>
 
 <body>
@@ -15,11 +15,9 @@
     </header>
 
     <main>
-        <div id="initial" class="scene-active">
+        <div id="initial" class="scene active">
             <h2>Estado Inicial del jugador</h2>
-            <div class="stats-box" id="stats-initial">
-
-            </div>
+            <div class="stats-box" id="stats-initial"></div>
             <button id="btn-to-market">Ir al mercado</button>
         </div>
 
@@ -30,48 +28,38 @@
                 <p id="discount-info"></p>
             </div>
             <h3>Productos disponibles:</h3>
-            <div id="market-container">
-
-            </div>
+            <div id="market-container"></div>
             <div class="info-box">
                 <h3>Productos seleccionados:</h3>
                 <div id="selected-products">Ninguno</div>
-                <p><strong>Total:</strong><span id="total-price">0</span> monedas</p>
+                <p><strong>Total:</strong> <span id="total-price">0</span> monedas</p>
             </div>
             <button id="btn-buy">Comprar</button>
-            <button id="btn-skip-market"></button>
+            <button id="btn-skip-market">Saltar mercado</button>
         </div>
 
         <div id="player" class="scene">
             <h2>Estado actual del jugador</h2>
-            <div class="stats-box" id="stats-player">
-
-            </div>
+            <div class="stats-box" id="stats-player"></div>
             <button id="btn-to-enemies">Continuar</button>
         </div>
 
         <div id="enemies" class="scene">
             <h2>Enemigos del reino</h2>
-            <div id="enemies-container">
-
-            </div>
+            <div id="enemies-container"></div>
             <button id="btn-to-battles">Continuar</button>
         </div>
 
         <div id="battles" class="scene">
             <h2>Batallas</h2>
-            <div id="battles-container">
-
-            </div>
-            <button id="btn-next-batlle" class="hidden">Siguiente batalla</button>
+            <div id="battles-container"></div>
+            <button id="btn-next-battle" class="hidden">Siguiente batalla</button>
             <button id="btn-to-results" class="hidden">Ver resultados</button>
         </div>
 
         <div id="results" class="scene">
             <h2>Resultados finales</h2>
-            <div id="results-container" class="stats-box">
-
-            </div>
+            <div id="results-container" class="stats-box"></div>
             <button id="btn-restart">Reiniciar aventura</button>
         </div>
     </main>
