@@ -69,16 +69,16 @@ class Enemigo {
 }
 
 let mercado = [
-  new Producto('Espada corta', 60, 'común', 'arma', { ataque: 8 }, 'img/axe.png'),
-  new Producto('Arco de caza', 70, 'común', 'arma', { ataque: 7 }, 'img/b_t_01.png'),
-  new Producto('Armadura de cuero', 90, 'común', 'armadura', { defensa: 6 }, 'img/armor.png'),
+  new Producto('Espada corta', 40, 'común', 'arma', { ataque: 8 }, 'img/axe.png'),
+  new Producto('Arco de caza', 50, 'común', 'arma', { ataque: 7 }, 'img/b_t_01.png'),
+  new Producto('Armadura de cuero', 70, 'común', 'armadura', { defensa: 6 }, 'img/armor.png'),
   new Producto('Poción pequeña', 20, 'común', 'consumible', { curacion: 20 }, 'img/apple.png'),
-  new Producto('Espada rúnica', 200, 'raro', 'arma', { ataque: 18 }, 'img/axe.png'),
-  new Producto('Escudo de roble', 160, 'raro', 'armadura', { defensa: 14 }, 'img/shield.png'),
+  new Producto('Espada rúnica', 170, 'raro', 'arma', { ataque: 18 }, 'img/axe.png'),
+  new Producto('Escudo de roble', 100, 'raro', 'armadura', { defensa: 14 }, 'img/shield.png'),
   new Producto('Poción grande', 60, 'raro', 'consumible', { curacion: 60 }, 'img/hp.png'),
-  new Producto('Mandoble épico', 300, 'épico', 'arma', { ataque: 32 }, 'img/axe.png'),
-  new Producto('Placas dracónicas', 320, 'épico', 'armadura', { defensa: 28 }, 'img/helmets.png'), 
-  new Producto('Elixir legendario', 120, 'épico', 'consumible', { curacion: 150 }, 'img/hp.png')
+  new Producto('Mandoble épico', 240, 'épico', 'arma', { ataque: 32 }, 'img/axe.png'),
+  new Producto('Placas dracónicas', 220, 'épico', 'armadura', { defensa: 28 }, 'img/helmets.png'), 
+  new Producto('Elixir legendario', 80, 'épico', 'consumible', { curacion: 150 }, 'img/hp.png')
 ];
 
 let enemigos = [
