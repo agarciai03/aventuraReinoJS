@@ -325,12 +325,6 @@ function siguienteBatalla() {
     html += '<p>0 puntos</p>';
   }
 
-  html += '<details><summary>Ver combate</summary>';
-  for (let i = 0; i < resultado.log.length; i++) {
-    html += '<p>' + resultado.log[i] + '</p>';
-  }
-  html += '</details>';
-
   div.innerHTML = html;
   document.getElementById('battles-container').appendChild(div);
 
