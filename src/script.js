@@ -13,7 +13,7 @@ class Producto {
     this.rareza = rareza;
     this.tipo = tipo;
     this.bonus = bonus;
-    this.imagen = imagen; 
+    this.imagen = imagen;
   }
 
   aplicarDescuento(porcentaje) {
@@ -77,7 +77,7 @@ let mercado = [
   new Producto('Escudo de roble', 100, 'raro', 'armadura', { defensa: 14 }, 'img/shield.png'),
   new Producto('Poción grande', 60, 'raro', 'consumible', { curacion: 60 }, 'img/hp.png'),
   new Producto('Mandoble épico', 240, 'épico', 'arma', { ataque: 32 }, 'img/axe.png'),
-  new Producto('Placas dracónicas', 220, 'épico', 'armadura', { defensa: 28 }, 'img/helmets.png'), 
+  new Producto('Placas dracónicas', 220, 'épico', 'armadura', { defensa: 28 }, 'img/helmets.png'),
   new Producto('Elixir legendario', 80, 'épico', 'consumible', { curacion: 150 }, 'img/hp.png')
 ];
 
@@ -115,9 +115,9 @@ function cargarInicial() {
 }
 
 function cargarMercado() {
-  descuentos.común = Math.floor(Math.random() * 11);      
-  descuentos.raro = Math.floor(Math.random() * 16);       
-  descuentos.épico = Math.floor(Math.random() * 21);      
+  descuentos.común = Math.floor(Math.random() * 11);
+  descuentos.raro = Math.floor(Math.random() * 16);
+  descuentos.épico = Math.floor(Math.random() * 21);
 
   document.getElementById('current-gold').textContent = oro;
   document.getElementById('discount-info').innerHTML =
@@ -242,7 +242,7 @@ function cargarJugador() {
   html += '<p><strong>Oro:</strong> ' + oro + '</p>';
   html += '<p><strong>Items:</strong> ' + jugador.inventario.length + '</p>';
   document.getElementById('stats-player').innerHTML = html;
-  actualizarInventario(); 
+  actualizarInventario();
 }
 
 function cargarEnemigos() {
