@@ -1,4 +1,9 @@
-// Archivo: modules/batallas.js
+/**
+ * Realiza una batalla por turnos entre jugador y enemigo.
+ * @param {Jugador} jugador - Instancia del jugador.
+ * @param {Enemigo|Jefe} enemigo - Instancia de enemigo o jefe.
+ * @returns {Object} Objeto resultado: ganador, puntos, registro.
+ */
 export function combate(jugador, enemigo) {
     let vidaJugador = jugador.vida;
     let vidaEnemigo = enemigo.vida;
