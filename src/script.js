@@ -1,381 +1,242 @@
-function showScene(id) {
-  let escenas = document.querySelectorAll('.scene');
-  for (let i = 0; i < escenas.length; i++) {
-    escenas[i].classList.remove('active');
-  }
+import { ORO_INICIAL, VIDA_JUGADOR, productosMercado, enemigosLista, jefeFinal, UMBRAL_VETERANO } from '../utils/constants.js';
+import { formatearPrecio } from '../utils/utils.js';
+import { Jugador } from '../modules/jugador.js';
+import { Enemigo, Jefe } from '../modules/enemigos.js';
+import { Producto } from '../modules/producto.js';
+import { obtenerProductosMercado } from '../modules/mercado.js';
+import { combate } from '../modules/batallas.js';
+import { obtenerRanking, mostrarMensajeRanking } from '../modules/ranking.js';
+
+// Variables globales
+let jugador, oro, productosDisponibles, enemigos, jefe, seleccionados = [], descuentos = {};
+
+function iniciarJuego() {
+  jugador = new Jugador("Aventurero", "img/personaje.png", VIDA_JUGADOR);
+  oro = ORO_INICIAL;
+  productosDisponibles = obtenerProductosMercado();
+  enemigos = enemigosLista.map(event => new Enemigo(event.nombre, "img/goblin.png", event.ataque, event.vida));
+  jefe = new Jefe(jefeFinal.nombre, "img/finalboss.png", jefeFinal.ataque, jefeFinal.vida, jefeFinal.multiplicador);
+  seleccionados = [];
+  descuentos = {};
+  mostrarEscena("initial");
+  mostrarEstadoInicial();
+  actualizarInventario();
+}
+
+// Cambia la escena visible
+function mostrarEscena(id) {
+  document.querySelectorAll('.scene').forEach(event => event.classList.remove('active'));
   document.getElementById(id).classList.add('active');
 }
 
-class Producto {
-  constructor(nombre, precio, rareza, tipo, bonus, imagen) {
-    this.nombre = nombre;
-    this.precio = precio;
-    this.rareza = rareza;
-    this.tipo = tipo;
-    this.bonus = bonus;
-    this.imagen = imagen;
-  }
-
-  aplicarDescuento(porcentaje) {
-    let nuevo = this.precio - (this.precio * porcentaje / 100);
-    return new Producto(this.nombre, Math.round(nuevo), this.rareza, this.tipo, this.bonus, this.imagen);
-  }
+// Muestra datos iniciales
+function mostrarEstadoInicial() {
+  let stats = `
+    <p><strong>Nombre:</strong> ${jugador.nombre}</p>
+    <p><strong>Vida:</strong> ${jugador.vida}</p>
+    <p><strong>Ataque:</strong> ${jugador.obtenerAtaqueTotal()}</p>
+    <p><strong>Defensa:</strong> ${jugador.obtenerDefensaTotal()}</p>
+    <p><strong>Oro:</strong> ${oro}</p>
+    <p><strong>Items:</strong> ${jugador.inventario.length}</p>
+  `;
+  document.getElementById("stats-inicial").innerHTML = stats;
 }
 
-class Jugador {
-  constructor(nombre) {
-    this.nombre = nombre;
-    this.vida = 100;
-    this.vidaMax = 100;
-    this.inventario = [];
-    this.puntos = 0;
-  }
+function mostrarEstadoActual() {
+  let stats = `
+    <p><strong>Nombre:</strong> ${jugador.nombre}</p>
+    <p><strong>Vida:</strong> ${jugador.vida}</p>
+    <p><strong>Ataque:</strong> ${jugador.obtenerAtaqueTotal()}</p>
+    <p><strong>Defensa:</strong> ${jugador.obtenerDefensaTotal()}</p>
+    <p><strong>Oro:</strong> ${oro}</p>
+    <p><strong>Items:</strong> ${jugador.inventario.length}</p>
+  `;
+  document.getElementById("stats-actual").innerHTML = stats;
+}
 
-  añadirItem(item) {
-    this.inventario.push(item);
-  }
-
-  ganarPuntos(cantidad) {
-    this.puntos += cantidad;
-  }
-
-  get ataqueTotal() {
-    let total = 0;
-    for (let i = 0; i < this.inventario.length; i++) {
-      if (this.inventario[i].bonus.ataque) {
-        total += this.inventario[i].bonus.ataque;
+function actualizarInventario() {
+  let contenedor = document.getElementById('inventory-container');
+  if (jugador.inventario.length === 0) {
+    contenedor.style.display = 'none';
+  } else {
+    contenedor.style.display = 'flex';
+    let slots = contenedor.querySelectorAll('.item');
+    for (let i = 0; i < slots.length; i++) {
+      if (i < jugador.inventario.length) {
+        let item = jugador.inventario[i];
+        slots[i].querySelector('img').src = item.imagen;
+        slots[i].querySelector('img').alt = item.nombre;
+      } else {
+        slots[i].querySelector('img').src = '';
+        slots[i].querySelector('img').alt = '';
       }
     }
-    return total;
-  }
-
-  get defensaTotal() {
-    let total = 0;
-    for (let i = 0; i < this.inventario.length; i++) {
-      if (this.inventario[i].bonus.defensa) {
-        total += this.inventario[i].bonus.defensa;
-      }
-    }
-    return total;
   }
 }
 
-class Enemigo {
-  constructor(nombre, ataque, vida) {
-    this.nombre = nombre;
-    this.ataque = ataque;
-    this.vida = vida;
-  }
-}
-
-let mercado = [
-  new Producto('Espada corta', 40, 'común', 'arma', { ataque: 8 }, 'img/axe.png'),
-  new Producto('Arco de caza', 50, 'común', 'arma', { ataque: 7 }, 'img/b_t_01.png'),
-  new Producto('Armadura de cuero', 70, 'común', 'armadura', { defensa: 6 }, 'img/armor.png'),
-  new Producto('Poción pequeña', 20, 'común', 'consumible', { curacion: 20 }, 'img/apple.png'),
-  new Producto('Espada rúnica', 170, 'raro', 'arma', { ataque: 18 }, 'img/axe.png'),
-  new Producto('Escudo de roble', 100, 'raro', 'armadura', { defensa: 14 }, 'img/shield.png'),
-  new Producto('Poción grande', 60, 'raro', 'consumible', { curacion: 60 }, 'img/hp.png'),
-  new Producto('Mandoble épico', 240, 'épico', 'arma', { ataque: 32 }, 'img/axe.png'),
-  new Producto('Placas dracónicas', 220, 'épico', 'armadura', { defensa: 28 }, 'img/helmets.png'),
-  new Producto('Elixir legendario', 80, 'épico', 'consumible', { curacion: 150 }, 'img/hp.png')
-];
-
-let enemigos = [
-  new Enemigo('Goblin', 15, 50),
-  new Enemigo('Orco', 25, 80),
-  new Enemigo('Dragón', 40, 150)
-];
-
-let jugador;
-let seleccionados;
-let descuentos;
-let oro;
-let batallaActual;
-let resultados;
-
-function reiniciarJuego() {
-  jugador = new Jugador('Aventurero');
-  seleccionados = [];
-  descuentos = {};
-  oro = 500;
-  batallaActual = 0;
-  resultados = [];
-  cargarInicial();
-  showScene('initial');
-}
-
-function cargarInicial() {
-  let html = '<p><strong>Nombre:</strong> ' + jugador.nombre + '</p>';
-  html += '<p><strong>Vida:</strong> ' + jugador.vida + '</p>';
-  html += '<p><strong>Ataque:</strong> ' + jugador.ataqueTotal + '</p>';
-  html += '<p><strong>Defensa:</strong> ' + jugador.defensaTotal + '</p>';
-  html += '<p><strong>Oro:</strong> ' + oro + '</p>';
-  document.getElementById('stats-initial').innerHTML = html;
-}
-
+// Mercado
 function cargarMercado() {
   descuentos.común = Math.floor(Math.random() * 11);
   descuentos.raro = Math.floor(Math.random() * 16);
   descuentos.épico = Math.floor(Math.random() * 21);
-
   document.getElementById('current-gold').textContent = oro;
-  document.getElementById('discount-info').innerHTML =
-    'Común: ' + descuentos.común + '% | Raro: ' + descuentos.raro + '% | Épico: ' + descuentos.épico + '%';
+  document.getElementById('discount-info').innerText =
+    `Común: ${descuentos.común}% | Raro: ${descuentos.raro}% | Épico: ${descuentos.épico}%`;
+  let listaDescuento = productosDisponibles.map(prod => prod.aplicarDescuento(descuentos[prod.rareza] || 0));
+  let contenedor = document.getElementById('market-container');
+  contenedor.innerHTML = "";
+  listaDescuento.forEach((prod, i) => {
+    let div = document.createElement("div");
+    div.className = "product-item";
+    div.innerHTML = `
+      <img src="${prod.imagen}" alt="${prod.nombre}" style="width:60px;height:auto;">
+      <h4>${prod.nombre}</h4>
+      <p>${prod.tipo} - ${prod.rareza}</p>
+      <p>Precio: ${formatearPrecio(prod.precio)} (${descuentos[prod.rareza]}% dto.)</p>
+      <p>${prod.mostrarBonus()}</p>
+    `;
+    div.onclick = () => seleccionarProductoMercado(i, prod, div);
+    contenedor.appendChild(div);
+  });
+  actualizarSeleccion();
+}
 
-  let container = document.getElementById('market-container');
-  container.innerHTML = '';
-
-  for (let i = 0; i < mercado.length; i++) {
-    let prod = mercado[i];
-    let desc = descuentos[prod.rareza];
-    let prodDesc = prod.aplicarDescuento(desc);
-
-    let div = document.createElement('div');
-    div.className = 'product-item';
-
-    let img = document.createElement('img');
-    img.src = prod.imagen;
-    img.alt = prod.nombre;
-    img.style.width = '60px';
-    img.style.height = 'auto';
-
-    let bonus = '';
-    if (prod.bonus.ataque) bonus += 'ataque +' + prod.bonus.ataque + ' ';
-    if (prod.bonus.defensa) bonus += 'defensa +' + prod.bonus.defensa + ' ';
-    if (prod.bonus.curacion) bonus += 'curación +' + prod.bonus.curacion;
-
-    div.innerHTML = '<h4>' + prod.nombre + '</h4>' +
-      '<p>' + prod.tipo + ' - ' + prod.rareza + '</p>' +
-      '<p>' + prod.precio + '€ → ' + prodDesc.precio + '€ (' + desc + '%)</p>' +
-      '<p>' + bonus + '</p>';
-
-    div.insertBefore(img, div.firstChild);
-
-    div.onclick = function () {
-      let pos = -1;
-      for (let j = 0; j < seleccionados.length; j++) {
-        if (seleccionados[j].index == i) {
-          pos = j;
-        }
-      }
-
-      if (pos !== -1) {
-        seleccionados.splice(pos, 1);
-        div.classList.remove('selected');
-      } else {
-        seleccionados.push({ index: i, producto: prodDesc });
-        div.classList.add('selected');
-      }
-      actualizarSeleccion();
-    };
-
-    container.appendChild(div);
+function seleccionarProductoMercado(indice, prod, div) {
+  let existe = seleccionados.find(sel => sel.indice === indice);
+  if (existe) {
+    seleccionados = seleccionados.filter(sel => sel.indice !== indice);
+    div.classList.remove('selected');
+  } else {
+    seleccionados.push({ indice: indice, producto: prod });
+    div.classList.add('selected');
   }
-
   actualizarSeleccion();
 }
 
 function actualizarSeleccion() {
-  let html = '';
+  let html = "";
   let total = 0;
-
   if (seleccionados.length === 0) {
-    html = 'Ninguno';
+    html = "Ninguno";
   } else {
-    for (let i = 0; i < seleccionados.length; i++) {
-      html += '<p>• ' + seleccionados[i].producto.nombre + ' - ' + seleccionados[i].producto.precio + '€</p>';
-      total += seleccionados[i].producto.precio;
-    }
+    seleccionados.forEach(sel => {
+      html += `<p>• ${sel.producto.nombre} - ${formatearPrecio(sel.producto.precio)}</p>`;
+      total += sel.producto.precio;
+    });
   }
-
   document.getElementById('selected-products').innerHTML = html;
-  document.getElementById('total-price').textContent = total;
+  document.getElementById('total-price').textContent = formatearPrecio(total);
 }
 
 function comprar() {
   if (seleccionados.length === 0) {
-    alert('No has seleccionado nada');
+    alert("No has seleccionado nada");
     return;
   }
-
-  let total = 0;
-  for (let i = 0; i < seleccionados.length; i++) {
-    total += seleccionados[i].producto.precio;
-  }
-
+  let total = seleccionados.reduce((acc, sel) => acc + sel.producto.precio, 0);
   if (total > oro) {
-    alert('No tienes suficiente oro');
+    alert("No tienes suficiente oro");
     return;
   }
-
-  for (let i = 0; i < seleccionados.length; i++) {
-    jugador.añadirItem(seleccionados[i].producto);
-  }
-
+  seleccionados.forEach(sel => jugador.añadirAlInventario(sel.producto.clonar()));
   oro -= total;
   seleccionados = [];
   actualizarInventario();
-  showScene('player');
-  cargarJugador();
+  mostrarEscena('player');
+  mostrarEstadoActual();
 }
 
-function actualizarInventario() {
-  let slots = document.querySelectorAll('#inventory-container .item');
-  for (let i = 0; i < slots.length; i++) {
-    if (i < jugador.inventario.length) {
-      let item = jugador.inventario[i];
-      slots[i].querySelector('img').src = item.imagen;
-      slots[i].querySelector('img').alt = item.nombre;
-    } else {
-      slots[i].querySelector('img').src = '';
-      slots[i].querySelector('img').alt = '';
-    }
-  }
-}
-
-function cargarJugador() {
-  let html = '<p><strong>Nombre:</strong> ' + jugador.nombre + '</p>';
-  html += '<p><strong>Vida:</strong> ' + jugador.vida + '</p>';
-  html += '<p><strong>Ataque:</strong> ' + jugador.ataqueTotal + '</p>';
-  html += '<p><strong>Defensa:</strong> ' + jugador.defensaTotal + '</p>';
-  html += '<p><strong>Oro:</strong> ' + oro + '</p>';
-  html += '<p><strong>Items:</strong> ' + jugador.inventario.length + '</p>';
-  document.getElementById('stats-player').innerHTML = html;
-  actualizarInventario();
-}
-
+// Enemigos
 function cargarEnemigos() {
   let container = document.getElementById('enemies-container');
-  container.innerHTML = '';
-
-  for (let i = 0; i < enemigos.length; i++) {
-    let div = document.createElement('div');
-    div.className = 'enemy-item';
-    div.innerHTML = '<h3>' + enemigos[i].nombre + '</h3>' +
-      '<p><strong>Ataque:</strong> ' + enemigos[i].ataque + '</p>' +
-      '<p><strong>Vida:</strong> ' + enemigos[i].vida + '</p>';
+  container.innerHTML = "";
+  enemigos.concat([jefe]).forEach(enemigo => {
+    let div = document.createElement("div");
+    div.className = "enemy-item";
+    div.innerHTML = `
+      <img src="${enemigo.avatar}" alt="${enemigo.nombre}" style="width:60px;height:auto;">
+      <h3>${enemigo.nombre}</h3>
+      <p><strong>Ataque:</strong> ${enemigo.ataque}</p>
+      <p><strong>Vida:</strong> ${enemigo.vida}</p>
+    `;
     container.appendChild(div);
-  }
+  });
 }
 
-function simularBatalla(enemigo) {
-  let vidaJugador = jugador.vida;
-  let vidaEnemigo = enemigo.vida;
-  let log = [];
-
-  let dmgJugador = jugador.ataqueTotal;
-  let dmgEnemigo = enemigo.ataque - jugador.defensaTotal;
-  if (dmgEnemigo < 1) dmgEnemigo = 1;
-
-  while (vidaJugador > 0 && vidaEnemigo > 0) {
-    vidaEnemigo -= dmgJugador;
-    log.push('Atacas y haces ' + dmgJugador + ' de daño');
-
-    if (vidaEnemigo <= 0) break;
-
-    vidaJugador -= dmgEnemigo;
-    log.push(enemigo.nombre + ' te ataca y hace ' + dmgEnemigo + ' de daño');
-  }
-
-  let gano = vidaJugador > 0;
-  let puntosGanados = 0;
-
-  if (gano) {
-    puntosGanados = 100 + enemigo.ataque;
-    jugador.ganarPuntos(puntosGanados);
-    jugador.vida = vidaJugador;
-  } else {
-    jugador.vida = 0;
-  }
-
-  return { gano: gano, puntos: puntosGanados, log: log };
-}
-
+// Batallas y resultados
+let rondaActual = 0;
+let resultadosBatallas = [];
 function cargarBatallas() {
-  batallaActual = 0;
-  resultados = [];
-  document.getElementById('battles-container').innerHTML = '';
-  document.getElementById('btn-next-battle').classList.add('hidden');
-  document.getElementById('btn-to-results').classList.add('hidden');
+  mostrarEscena('battles');
+  rondaActual = 0;
+  resultadosBatallas = [];
+  document.getElementById('battles-container').innerHTML = "";
   siguienteBatalla();
 }
 
 function siguienteBatalla() {
-  if (batallaActual >= enemigos.length || jugador.vida <= 0) {
+  let listaLucha = enemigos.concat([jefe]);
+  if (rondaActual >= listaLucha.length || jugador.vida <= 0) {
     document.getElementById('btn-next-battle').classList.add('hidden');
     document.getElementById('btn-to-results').classList.remove('hidden');
     return;
   }
-
-  let enemigo = enemigos[batallaActual];
-  let resultado = simularBatalla(enemigo);
-  resultados.push(resultado);
-
-  let div = document.createElement('div');
-  div.className = 'battle-item';
-
-  let html = '<h3>Batalla ' + (batallaActual + 1) + ': ' + enemigo.nombre + '</h3>';
-
-  if (resultado.gano) {
-    html += '<p class="result-text winner">¡VICTORIA!</p>';
-    html += '<p>+' + resultado.puntos + ' puntos</p>';
+  let enemigo = listaLucha[rondaActual];
+  let resultado = combate(jugador, enemigo);
+  resultadosBatallas.push(resultado);
+  if (resultado.ganador === "jugador") {
+    jugador.sumarPuntos(resultado.puntos);
+    jugador.vida = jugador.obtenerVidaTotal();
   } else {
-    html += '<p class="result-text loser">DERROTA</p>';
-    html += '<p>0 puntos</p>';
+    jugador.vida = 0;
   }
+  let div = document.createElement("div");
+  div.className = "battle-item";
 
+  // MOSTRAMOS RESULTADO
+  let html = `<h3>Batalla ${rondaActual + 1}: ${enemigo.nombre}</h3>`;
+  if (resultado.ganador === "jugador") {
+    html += `<p class="result-text winner">¡VICTORIA!</p>`;
+    html += `<p>+${resultado.puntos} puntos</p>`;
+  } else {
+    html += `<p class="result-text loser">DERROTA</p>`;
+    html += `<p>0 puntos</p>`;
+  }
   div.innerHTML = html;
-  document.getElementById('battles-container').appendChild(div);
+  document.getElementById("battles-container").appendChild(div);
 
-  batallaActual++;
-
-  if (batallaActual < enemigos.length && jugador.vida > 0) {
+  rondaActual++;
+  if (rondaActual < listaLucha.length && jugador.vida > 0) {
     document.getElementById('btn-next-battle').classList.remove('hidden');
+    document.getElementById('btn-to-results').classList.add('hidden');
   } else {
     document.getElementById('btn-next-battle').classList.add('hidden');
     document.getElementById('btn-to-results').classList.remove('hidden');
   }
 }
 
+
 function mostrarResultados() {
-  const umbral = 300;
-  const esPro = jugador.puntos >= umbral;
+  let ranking = obtenerRanking(jugador.puntos, UMBRAL_VETERANO);
+  let mensaje = mostrarMensajeRanking(ranking);
   document.getElementById('results-container').innerHTML = `
-        <h3>${esPro ? '¡Eres un PRO!' : 'Eres un ROOKIE...'}</h3>
-        <p><strong>Puntos totales:</strong> ${jugador.puntos}</p>
-        <p><strong>Vida final:</strong> ${jugador.vida}</p>
-        <p><strong>Items comprados:</strong> ${jugador.inventario.length}</p>
-    `;
-  showScene('results');
+    <h3>${ranking}</h3>
+    <p><strong>Puntos totales:</strong> ${jugador.puntos}</p>
+    <p><strong>Vida final:</strong> ${jugador.vida}</p>
+    <p><strong>Items comprados:</strong> ${jugador.inventario.length}</p>
+    <p>${mensaje}</p>
+  `;
+  mostrarEscena('results');
 }
 
-document.getElementById('btn-to-market').onclick = () => {
-  showScene('market');
-  cargarMercado();
-};
-
+// Botones
+document.getElementById('btn-to-market').onclick = () => { mostrarEscena('market'); cargarMercado(); };
 document.getElementById('btn-buy').onclick = comprar;
-
-document.getElementById('btn-skip-market').onclick = () => {
-  showScene('player');
-  cargarJugador();
-};
-
-document.getElementById('btn-to-enemies').onclick = () => {
-  showScene('enemies');
-  cargarEnemigos();
-};
-
-document.getElementById('btn-to-battles').onclick = () => {
-  showScene('battles');
-  cargarBatallas();
-};
-
+document.getElementById('btn-skip-market').onclick = () => { mostrarEscena('player'); mostrarEstadoActual(); };
+document.getElementById('btn-to-enemies').onclick = () => { mostrarEscena('enemies'); cargarEnemigos(); };
+document.getElementById('btn-to-battles').onclick = cargarBatallas;
 document.getElementById('btn-next-battle').onclick = siguienteBatalla;
-
 document.getElementById('btn-to-results').onclick = mostrarResultados;
+document.getElementById('btn-restart').onclick = iniciarJuego;
 
-document.getElementById('btn-restart').onclick = reiniciarJuego;
-
-reiniciarJuego();
+iniciarJuego();
