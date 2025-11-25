@@ -1,29 +1,40 @@
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
 :root {
-    --primary-color: #77530aec;
-    --secondary-color: #f4e652;
-    --accent-color: #45b316;
-    --danger-color: rgb(206, 64, 38);
+    --brown-dark: #6e4e19;
+    --brown-light: #cfa962;
+    --yellow: #f9f261;
+    --white: #fff;
+    --black: #191919;
+    --shadow: rgba(0, 0, 0, .07);
+    --radius: 8px;
+    --gap: 14px;
+    --font-cartoon: 'Comic Sans MS', 'Comic Sans', cursive, 'Roboto', Arial, sans-serif;
 }
 
 body {
-    background-color: white;
+    background: var(--brown-light);
+    font-family: var(--font-cartoon);
+    color: var(--black);
     min-height: 100vh;
-    display: grid;
-    grid-template-rows: auto 1fr auto;
-    margin: 16px;
-    padding: 16px;
-    font-family: Arial, sans-serif;
+    margin: 0;
 }
 
+/* ----- HEADER ----- */
 header {
+    font-family: var(--font-cartoon);
+    font-size: 29px;
+    padding: 20px 0 10px 0;
+    background: var(--brown-dark);
+    color: var(--yellow);
     text-align: center;
-    margin-bottom: 20px;
+    letter-spacing: 2px;
+}
+
+h2,
+h3 {
+    color: var(--brown-dark);
+    font-family: var(--font-cartoon);
+    margin-bottom: 14px;
+    margin-top: 8px;
 }
 
 .scene {
@@ -32,160 +43,359 @@ header {
 
 .scene.active {
     display: block;
+    animation: fadein .9s;
 }
 
-#player-image {
-    width: 100px;
-    height: 100px;
-}   
+@keyframes fadein {
+    from {
+        opacity: 0
+    }
 
-button {
-    padding: 12px 24px;
-    margin: 10px 5px;
-    background-color: var(--accent-color);
-    color: white;
-    border-radius: 5px;
-    cursor: pointer;
-    border: none;
-    font-size: 16px;
+    to {
+        opacity: 1
+    }
 }
 
-.stats-box {
-    background-color: #f9f9f9;
-    padding: 15px;
-    border-radius: 5px;
-    margin: 15px 0;
-    border: 2px solid var(--primary-color);
-}
-
-.info-box {
-    background: var(--secondary-color);
-    padding: 15px;
-    border-radius: 5px;
-    margin: 15px 0;
-    border: 2px solid var(--primary-color);
-}
-
-h2,
-h3,
-h4 {
-    margin-bottom: 15px;
-    color: var(--primary-color);
-}
-
-#market-container,
-#enemies-container,
-#battles-container {
-    margin: 20px 0;
+/* ------ MERCADO ------ */
+#market-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 22px;
+    margin: 0 0 18px 0;
 }
 
 .product-item {
-    border: 2px solid #ddd;
-    padding: 15px;
-    margin: 10px 0;
-    border-radius: 5px;
-    cursor: pointer;
-    background-color: white;
-    transition: all 0.3s;
+    background: var(--white);
+    border: 3.5px solid var(--brown-dark);
+    border-radius: var(--radius);
+    box-shadow: 0 4px 0 var(--brown-light);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    padding: 17px 10px 12px 10px;
+    transition: box-shadow .2s, background .20s, border .20s;
+    min-height: 245px;
 }
 
+.product-item.selected,
 .product-item:hover {
-    background-color: #f5f5f5;
-    border-color: var(--primary-color);
-    transform: scale(1.02);
+    background: var(--yellow);
+    border: 4px solid var(--brown-dark);
+    box-shadow: 0 8px 20px #311b02a0;
 }
 
-.product-item.selected {
-    border-color: var(--accent-color);
-    background-color: #e8f5e9;
+.product-item img {
+    width: 85px;
+    max-height: 88px;
+    margin-bottom: 10px;
+    margin-top: 6px;
+    background: #fff;
+    border-radius: 6px;
+}
+
+.product-item h4 {
+    margin: 2px 0;
+    font-size: 18px;
+}
+
+.product-item p {
+    margin: 1px 0;
+    text-align: center
+}
+
+.product-item button,
+.btn-add,
+.btn-remove {
+    background: var(--yellow);
+    border: 2px solid var(--brown-dark);
+    border-radius: 6px;
+    color: var(--black);
+    font-weight: bold;
+    font-family: var(--font-cartoon);
+    font-size: 15px;
+    margin-top: 7px;
+    padding: 6px 16px;
+    cursor: pointer;
+    transition: background .18s;
+}
+
+.product-item button:hover {
+    background: var(--brown-dark);
+    color: var(--yellow)
+}
+
+.product-item .btn-remove {
+    background: var(--brown-light);
+    color: #683505;
+}
+
+.product-item .btn-remove:hover {
+    background: var(--danger-color);
+    color: #fff;
+}
+
+/* ------ PANEL JUGADOR ------ */
+.jugador-panel {
+    background: var(--brown-light);
+    border-radius: var(--radius);
+    border: 4px solid var(--brown-dark);
+    margin: 0 0 20px 0;
+    display: flex;
+    align-items: flex-start;
+    padding: 16px 20px;
+}
+
+.jugador-avatar {
+    width: 130px;
+    height: 130px;
+    border-radius: 16px;
+    object-fit: cover;
+    margin-right: 24px;
+    box-shadow: 0 6px 30px #0002;
+}
+
+.jugador-datos {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+    width: 100%;
+}
+
+.jugador-datos .stat {
+    background: var(--brown-dark);
+    color: var(--yellow);
+    border-radius: var(--radius);
+    font-size: 18px;
+    text-align: center;
+    padding: 18px 0 13px 0;
+    box-shadow: 0 3px 12px var(--brown-dark);
+}
+
+/* ------ ENEMIGOS ------ */
+#enemies-container {
+    display: grid;
+    gap: 24px;
+    grid-template-columns: repeat(2, 1fr);
+    background: var(--brown-dark);
+    padding: 22px 18px;
+    border-radius: 14px;
+    margin: 0 0 16px 0;
 }
 
 .enemy-item {
-    background: #ffebee;
-    padding: 15px;
-    margin: 10px 0;
-    border-radius: 5px;
-    border: 2px solid var(--danger-color);
+    background: var(--white);
+    border: 3px solid var(--brown-dark);
+    border-radius: var(--radius);
+    text-align: center;
+    padding: 13px;
+    min-height: 194px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 9px #311b0260;
+}
+
+.enemy-item img {
+    width: 88px;
+    min-height: 80px;
+    margin-bottom: 5px;
+}
+
+.enemy-item h3 {
+    font-size: 18px;
+    color: var(--brown-dark);
+    margin-bottom: 6px;
+}
+
+.enemy-item p {
+    font-size: 15px;
+    margin-bottom: 2px;
+    color: #26190a
+}
+
+/* ------ BATALLA VS ------- */
+.battle-vs-row {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    background: var(--brown-light);
+    border-radius: 10px;
+    border: 4px solid var(--brown-dark);
+    margin-top: 18px;
+    padding: 16px 8px;
+}
+
+.battle-vs-avatar {
+    width: 135px;
+    height: 135px;
+    border-radius: 13px;
+    background: #fff;
+    object-fit: cover;
+}
+
+.battle-vs-vs {
+    font-size: 32px;
+    font-family: var(--font-cartoon);
+    font-weight: bold;
+    color: var(--brown-dark);
 }
 
 .battle-item {
-    background: #e3f2fd;
-    padding: 20px;
-    margin: 15px 0;
-    border-radius: 5px;
-    border: 2px solid var(--primary-color);
+    background: var(--brown-dark);
+    color: var(--yellow);
+    border-radius: 12px;
+    font-size: 22px;
+    margin: 22px auto 10px auto;
+    width: 95%;
+    text-align: center;
+    border: 0;
+    box-shadow: 0 2px 22px #0002;
+    padding: 26px 0;
 }
 
-.result-text {
-    font-weight: bold;
-    font-size: 18px;
-    margin: 10px 0;
+#results-container {
+    background: var(--brown-dark);
+    color: var(--yellow);
+    border-radius: 12px;
+    margin: 36px auto 8px auto;
+    width: 95%;
+    text-align: center;
+    font-size: 24px;
+    box-shadow: 0 6px 32px #1b090230;
+    padding: 52px 10px 44px 10px;
 }
 
-.winner {
-    color: var(--accent-color);
-}
-
-.loser {
-    color: var(--danger-color);
-}
-
-.hidden {
-    display: none;
-}
-
-details {
-    margin-top: 10px;
-}
-
-summary {
-    cursor: pointer;
-    padding: 5px;
-    background: #f5f5f5;
-    border-radius: 3px;
-}
-
-.stats-box p {
-    margin: 8px 0;
-}
-
-.inventory-section {
-    margin: 20px 0;
-}
-
-.inventory-grid {
-    display: grid;
-    grid-template-columns: repeat(6, 1fr);
-    gap: 8px;
-    margin-top: 10px;
-}
-
+/* ------ INVENTARIO ------ */
 #inventory-container {
-    background-color: var(--primary-color);
-    padding: 12px;
-    border-radius: 8px;
-    display: grid;
-    grid-template-columns: repeat(6, 1fr);
-    gap: 8px;
+    background: var(--brown-dark);
+    border: 4px solid #312211;
+    border-radius: 6px;
+    display: flex;
+    justify-content: center;
     align-items: center;
-    justify-items: center;
-    color: white;
-    margin-top: 10px;
+    gap: 8px;
+    min-height: 65px;
+    margin: 18px auto 10px auto;
+    max-width: 540px;
+    padding: 12px 0;
 }
 
-.inventory-item {
-    background-color: #ffffff;
-    color: #000;
-    width: 100%;
-    height: 50px;
+#inventory-container .item {
+    width: 60px;
+    height: 65px;
+    background: var(--brown-light);
+    border-radius: 6px;
+    border: 2.5px solid #a08453;
+    box-shadow: 0 2px 13px #e6ca9a7a inset;
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
-.inventory-item img {
-    max-width: 80%;
-    max-height: 80%;
+#inventory-container .item img {
+    max-width: 90%;
+    max-height: 90%;
     object-fit: contain;
     display: block;
+    border: none;
+    background: transparent;
+    transition: transform .25s;
+}
+
+#inventory-container .item img:hover {
+    transform: scale(1.12) rotate(-8deg);
+    filter: brightness(1.2) drop-shadow(0 0 10px #fff4);
+}
+
+.stats-box,
+.info-box {
+    background: var(--brown-light);
+    border-radius: 6px;
+    margin: 14px 0;
+    border: 2.5px solid var(--brown-dark);
+    color: var(--brown-dark);
+    box-shadow: 0 1px 10px #9c843320;
+    padding: 15px 8px;
+    font-family: var(--font-cartoon);
+    text-align: center;
+}
+
+button,
+.btn {
+    background: var(--yellow);
+    color: var(--brown-dark);
+    border: 2px solid var(--brown-dark);
+    border-radius: 7px;
+    font-family: var(--font-cartoon);
+    font-size: 17px;
+    box-shadow: 0 2px 1px #efd66260;
+    margin-top: 8px;
+    transition: background .18s, color .13s, transform .15s;
+    min-width: 100px;
+    padding: 7px 0;
+}
+
+button:hover,
+.btn:hover,
+button:focus {
+    background: var(--brown-dark);
+    color: var(--yellow);
+    transform: scale(1.08);
+}
+
+/* ------ RESPONSIVE ------ */
+@media (max-width: 1050px) {
+    #market-container {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    #enemies-container {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 600px) {
+    #market-container {
+        grid-template-columns: 1fr;
+    }
+
+    .jugador-panel {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .jugador-avatar {
+        margin: 0;
+        margin-bottom: 20px;
+    }
+
+    #inventory-container {
+        max-width: 320px;
+    }
+}
+
+@media (max-width: 420px) {
+    button {
+        min-width: 70px;
+    }
+
+    .product-item {
+        padding: 6px;
+    }
+
+    .enemy-item {
+        padding: 5px;
+    }
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--brown-dark);
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar {
+    width: 8px;
+    background: var(--brown-light);
 }
