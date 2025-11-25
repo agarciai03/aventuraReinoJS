@@ -13,7 +13,6 @@ let jugador, oro, productosDisponibles, enemigos, jefe, seleccionados = [], desc
 
 //inicio del juego
 function iniciarJuego() {
-//muestra el jugador y carga datos
   jugador = new Jugador("Aventurero", "img/personaje.png", VIDA_JUGADOR);
   oro = ORO_INICIAL;
   productosDisponibles = obtenerProductosMercado();
@@ -26,13 +25,13 @@ function iniciarJuego() {
   actualizarInventario();
 }
 
-//muestra escenas
+//cambio entre escenas
 function mostrarEscena(id) {
-  document.querySelectorAll('.scene').forEach(event => event.classList.remove('active'));
+  document.querySelectorAll('.scene').forEach(e => e.classList.remove('active'));
   document.getElementById(id).classList.add('active');
 }
 
-// estado jugador inicial
+//estado inicial jugador
 function mostrarEstadoInicial() {
   let stats = `
     <p><strong>Nombre:</strong> ${jugador.nombre}</p>
@@ -45,7 +44,7 @@ function mostrarEstadoInicial() {
   document.getElementById("stats-inicial").innerHTML = stats;
 }
 
-// resumen de compras y estado actual
+// jugador tras mercado
 function mostrarEstadoActual() {
   let stats = `
     <p><strong>Nombre:</strong> ${jugador.nombre}</p>
@@ -58,7 +57,7 @@ function mostrarEstadoActual() {
   document.getElementById("stats-actual").innerHTML = stats;
 }
 
-// actualizo el inventario del jugador
+// inventario
 function actualizarInventario() {
   let contenedor = document.getElementById('inventory-container');
   if (jugador.inventario.length === 0) {
@@ -79,7 +78,7 @@ function actualizarInventario() {
   }
 }
 
-// carga productos del mercado con descuentos aleatorios
+// mercado
 function cargarMercado() {
   descuentos.común = Math.floor(Math.random() * 11);
   descuentos.raro = Math.floor(Math.random() * 16);
@@ -96,7 +95,7 @@ function cargarMercado() {
     let div = document.createElement("div");
     div.className = "product-item";
     div.innerHTML = `
-      <img src="${prod.imagen}" alt="${prod.nombre}" style="width:60px;height:auto;">
+      <img src="${prod.imagen}" alt="${prod.nombre}" style="width:85px;height:85px;">
       <h4>${prod.nombre}</h4>
       <p>${prod.tipo} - ${prod.rareza}</p>
       <p>Precio: ${formatearPrecio(prod.precio)} (${descuentos[prod.rareza]}% dto.)</p>
@@ -108,7 +107,6 @@ function cargarMercado() {
   actualizarSeleccion();
 }
 
-// selecccionar o no productos del mercado
 function seleccionarProductoMercado(indice, prod, div) {
   let existe = seleccionados.find(sel => sel.indice === indice);
   if (existe) {
@@ -121,7 +119,6 @@ function seleccionarProductoMercado(indice, prod, div) {
   actualizarSeleccion();
 }
 
-// carrito de compra y el total
 function actualizarSeleccion() {
   let html = "";
   let total = 0;
@@ -137,7 +134,6 @@ function actualizarSeleccion() {
   document.getElementById('total-price').textContent = formatearPrecio(total);
 }
 
-//compra de productos
 function comprar() {
   if (seleccionados.length === 0) {
     alert("No has seleccionado nada");
@@ -156,7 +152,7 @@ function comprar() {
   mostrarEstadoActual();
 }
 
-// enemigos y jefe
+// enemigos
 function cargarEnemigos() {
   let container = document.getElementById('enemies-container');
   container.innerHTML = "";
@@ -164,7 +160,7 @@ function cargarEnemigos() {
     let div = document.createElement("div");
     div.className = "enemy-item";
     div.innerHTML = `
-      <img src="${enemigo.avatar}" alt="${enemigo.nombre}" style="width:60px;height:auto;">
+      <img src="${enemigo.avatar}" alt="${enemigo.nombre}">
       <h3>${enemigo.nombre}</h3>
       <p><strong>Ataque:</strong> ${enemigo.ataque}</p>
       <p><strong>Vida:</strong> ${enemigo.vida}</p>
@@ -173,7 +169,7 @@ function cargarEnemigos() {
   });
 }
 
-// flujo de batallas
+// flujo de batallas, 1 por escena
 let rondaActual = 0;
 let resultadosBatallas = [];
 function cargarBatallas() {
@@ -195,7 +191,7 @@ function siguienteBatalla() {
   let resultado = combate(jugador, enemigo);
   resultadosBatallas.push(resultado);
 
-  // Suma puntos o pone vida a cero según resultado
+  // Suma puntos 
   if (resultado.ganador === "jugador") {
     jugador.sumarPuntos(resultado.puntos);
     jugador.vida = jugador.obtenerVidaTotal();
@@ -203,19 +199,23 @@ function siguienteBatalla() {
     jugador.vida = 0;
   }
 
-  // Muestra resultados
-  let div = document.createElement("div");
-  div.className = "battle-item";
-  let html = `<h3>Batalla ${rondaActual + 1}: ${enemigo.nombre}</h3>`;
-  if (resultado.ganador === "jugador") {
-    html += `<p class="result-text winner">¡VICTORIA!</p>`;
-    html += `<p>+${resultado.puntos} puntos</p>`;
-  } else {
-    html += `<p class="result-text loser">DERROTA</p>`;
-    html += `<p>0 puntos</p>`;
-  }
-  div.innerHTML = html;
-  document.getElementById("battles-container").appendChild(div);
+  // solo aparece una batalla a la vez
+  let battlesDiv = document.getElementById("battles-container");
+  battlesDiv.innerHTML = `
+    <div class="battle-vs-row">
+      <img class="battle-vs-avatar slide-in-left" src="${jugador.avatar}" alt="Jugador" style="margin-right:18px;">
+      <span class="battle-vs-vs">vs</span>
+      <img class="battle-vs-avatar slide-in-right" src="${enemigo.avatar}" alt="${enemigo.nombre}" style="margin-left:18px;">
+    </div>
+    <div class="battle-item">
+      <div class="result-text ${resultado.ganador === "jugador" ? "winner" : "loser"}">
+        ${resultado.ganador === "jugador" ? "¡VICTORIA!" : "DERROTA"}
+      </div>
+      <div>
+        ${resultado.ganador === "jugador" ? `+${resultado.puntos} puntos` : "0 puntos"}
+      </div>
+    </div>
+  `;
 
   rondaActual++;
   if (rondaActual < listaLucha.length && jugador.vida > 0) {
@@ -225,9 +225,10 @@ function siguienteBatalla() {
     document.getElementById('btn-next-battle').classList.add('hidden');
     document.getElementById('btn-to-results').classList.remove('hidden');
   }
+
 }
 
-// Resultados finales y ranking
+// resultados y ranking
 function mostrarResultados() {
   let ranking = obtenerRanking(jugador.puntos, UMBRAL_VETERANO);
   let mensaje = mostrarMensajeRanking(ranking);
@@ -241,7 +242,7 @@ function mostrarResultados() {
   mostrarEscena('results');
 }
 
-// Botones
+// botones
 document.getElementById('btn-to-market').onclick = () => { mostrarEscena('market'); cargarMercado(); };
 document.getElementById('btn-buy').onclick = comprar;
 document.getElementById('btn-skip-market').onclick = () => { mostrarEscena('player'); mostrarEstadoActual(); };
@@ -251,5 +252,5 @@ document.getElementById('btn-next-battle').onclick = siguienteBatalla;
 document.getElementById('btn-to-results').onclick = mostrarResultados;
 document.getElementById('btn-restart').onclick = iniciarJuego;
 
+//inicio del juego
 iniciarJuego();
-
