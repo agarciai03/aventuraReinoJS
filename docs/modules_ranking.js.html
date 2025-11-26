@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Home</title>
+    <title>JSDoc: Source: modules/ranking.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,32 +17,38 @@
 
 <div id="main">
 
-    <h1 class="page-title">Home</h1>
+    <h1 class="page-title">Source: modules/ranking.js</h1>
 
     
 
 
 
     
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * Obtiene el rango del jugador según los puntos.
+ * @param {number} puntos - Puntuación final.
+ * @param {number} [umbral=300] - Umbral para veterano.
+ * @returns {string} 'Veterano' o 'Novato'.
+ */
+export function obtenerRanking(puntos, umbral = 300) {
+    return puntos >= umbral ? "Veterano" : "Novato";
+}
 
-
-    <h3> </h3>
-
-
-
-
-
-
-
-
-
-
-    
-
-
-
-
-
+/**
+ * Muestra mensaje final personalizado según ranking.
+ * @param {string} ranking - 'Veterano' o 'Novato'.
+ * @returns {string} Mensaje personalizado.
+ */
+export function mostrarMensajeRanking(ranking) {
+    return ranking === "Veterano"
+        ? "¡Felicidades, eres un auténtico veterano de la aventura!"
+        : "Has sido un novato, pero puedes mejorar tu puntuación.";
+}
+</code></pre>
+        </article>
+    </section>
 
 
 

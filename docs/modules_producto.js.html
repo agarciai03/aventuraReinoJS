@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Home</title>
+    <title>JSDoc: Source: modules/producto.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,32 +17,65 @@
 
 <div id="main">
 
-    <h1 class="page-title">Home</h1>
+    <h1 class="page-title">Source: modules/producto.js</h1>
 
     
 
 
 
     
-
-
-    <h3> </h3>
-
-
-
-
-
-
-
-
-
-
-    
-
-
-
-
-
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * Clase Producto para crear objetos del mercado.
+ */
+export class Producto {
+    /**
+     * @param {string} nombre
+     * @param {number} precio
+     * @param {string} rareza
+     * @param {string} tipo
+     * @param {Object} bonus
+     * @param {string} imagen
+     */
+    constructor(nombre, precio, rareza, tipo, bonus, imagen) {
+        this.nombre = nombre;
+        this.precio = precio;
+        this.rareza = rareza;
+        this.tipo = tipo;
+        this.bonus = bonus;
+        this.imagen = imagen;
+    }
+    /**
+     * Aplica un descuento y devuelve una copia modificada.
+     * @param {number} porcentaje - Descuento a aplicar
+     * @returns {Producto} Nuevo producto con descuento
+     */
+    aplicarDescuento(porcentaje) {
+        const nuevo = this.precio - (this.precio * porcentaje / 100);
+        return new Producto(this.nombre, Math.round(nuevo), this.rareza, this.tipo, this.bonus, this.imagen);
+    }
+    /**
+     * Devuelve un texto con el bonus principal.
+     * @returns {string}
+     */
+    mostrarBonus() {
+        if (this.tipo === 'arma') return "Ataque +" + this.bonus.ataque;
+        if (this.tipo === 'armadura') return "Defensa +" + this.bonus.defensa;
+        if (this.tipo === 'consumible') return "Curación +" + this.bonus.curacion;
+        return "";
+    }
+    /**
+     * Clona el producto para el inventario.
+     * @returns {Producto}
+     */
+    clonar() {
+        return new Producto(this.nombre, this.precio, this.rareza, this.tipo, { ...this.bonus }, this.imagen);
+    }
+}
+</code></pre>
+        </article>
+    </section>
 
 
 

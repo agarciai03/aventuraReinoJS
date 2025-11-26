@@ -1,7 +1,9 @@
 {
     "source": {
         "include": [
-            "src"
+            "src",
+            "modules",
+            "utils"
         ],
         "includePattern": ".js$"
     },

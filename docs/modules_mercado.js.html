@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Home</title>
+    <title>JSDoc: Source: modules/mercado.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,32 +17,28 @@
 
 <div id="main">
 
-    <h1 class="page-title">Home</h1>
+    <h1 class="page-title">Source: modules/mercado.js</h1>
 
     
 
 
 
     
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import { productosMercado } from "../utils/constants.js";
+import { Producto } from "./producto.js";
 
-
-    <h3> </h3>
-
-
-
-
-
-
-
-
-
-
-    
-
-
-
-
-
+/**
+ * Devuelve lista de productos como instancias de Producto.
+ * @returns {Producto[]} Array de productos instanciados.
+ */
+export function obtenerProductosMercado() {
+    return productosMercado.map(obj => new Producto(obj.nombre, obj.precio, obj.rareza, obj.tipo, obj.bonus, obj.imagen));
+}
+</code></pre>
+        </article>
+    </section>
 
 
 

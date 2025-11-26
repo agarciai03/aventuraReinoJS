@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Home</title>
+    <title>JSDoc: Source: modules/batallas.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,32 +17,48 @@
 
 <div id="main">
 
-    <h1 class="page-title">Home</h1>
+    <h1 class="page-title">Source: modules/batallas.js</h1>
 
     
 
 
 
     
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * Realiza una batalla por turnos entre jugador y enemigo.
+ * @param {Jugador} jugador - Instancia del jugador.
+ * @param {Enemigo|Jefe} enemigo - Instancia de enemigo o jefe.
+ * @returns {Object} Objeto resultado: ganador, puntos, registro.
+ */
+export function combate(jugador, enemigo) {
+    let vidaJugador = jugador.vida;
+    let vidaEnemigo = enemigo.vida;
+    let defensa = jugador.obtenerDefensaTotal();
+    let ataqueJugador = jugador.obtenerAtaqueTotal();
+    let registro = [];
 
-
-    <h3> </h3>
-
-
-
-
-
-
-
-
-
-
-    
-
-
-
-
-
+    while (vidaJugador > 0 &amp;&amp; vidaEnemigo > 0) {
+        vidaEnemigo -= ataqueJugador;
+        registro.push(`El jugador ataca y hace ${ataqueJugador} de daño`);
+        if (vidaEnemigo &lt;= 0) break;
+        let dañoEnemigo = enemigo.ataque - defensa;
+        if (dañoEnemigo &lt; 1) dañoEnemigo = 1;
+        vidaJugador -= dañoEnemigo;
+        registro.push(`${enemigo.nombre} ataca y hace ${dañoEnemigo} de daño`);
+    }
+    let ganador = vidaJugador > 0 ? "jugador" : "enemigo";
+    let puntos = 0;
+    if (ganador === "jugador") {
+        puntos = 100 + enemigo.ataque;
+        if (enemigo.multiplicador) puntos = Math.round(puntos * enemigo.multiplicador);
+    }
+    return { ganador, puntos: ganador === "jugador" ? puntos : 0, registro };
+}
+</code></pre>
+        </article>
+    </section>
 
 
 
