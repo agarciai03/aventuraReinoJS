@@ -46,6 +46,19 @@ h3 {
     animation: fadein .9s;
 }
 
+#player-image {
+    width: 145px;
+    height: 145px;
+    max-width: 85vw;
+    max-height: 28vh;
+    display: block;
+    margin: 24px 0 8px 24px;
+    border-radius: 12px;
+    box-shadow: 0 4px 22px #322 0.18;
+    object-fit: contain;
+}
+
+
 @keyframes fadein {
     from {
         opacity: 0
@@ -90,7 +103,6 @@ h3 {
     max-height: 88px;
     margin-bottom: 10px;
     margin-top: 6px;
-    background: #fff;
     border-radius: 6px;
 }
 
@@ -215,7 +227,7 @@ h3 {
     color: #26190a
 }
 
-/* ------ BATALLA VS ------- */
+/* ------ BATALLA ------- */
 .battle-vs-row {
     display: flex;
     justify-content: space-around;
@@ -231,8 +243,6 @@ h3 {
     width: 135px;
     height: 135px;
     border-radius: 13px;
-    background: #fff;
-    object-fit: cover;
 }
 
 .battle-vs-vs {
