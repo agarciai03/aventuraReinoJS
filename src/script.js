@@ -8,10 +8,16 @@ import { obtenerProductosMercado } from '../modules/mercado.js';
 import { combate } from '../modules/batallas.js';
 import { obtenerRanking, mostrarMensajeRanking } from '../modules/ranking.js';
 
+
 //variables
 let jugador, oro, productosDisponibles, enemigos, jefe, seleccionados = [], descuentos = {};
 
-//inicio del juego
+
+/**
+ * Inicia la partida desde cero.
+ * Crea jugador, carga mercado, enemigos y jefe y muestra la escena inicial.
+ * @returns {void}
+ */
 function iniciarJuego() {
   jugador = new Jugador("Aventurero", "img/personaje.png", VIDA_JUGADOR);
   oro = ORO_INICIAL;
@@ -25,13 +31,23 @@ function iniciarJuego() {
   actualizarInventario();
 }
 
-//cambio entre escenas
+
+/**
+ * Cambia la escena activa del juego.
+ * @param {string} id - Id de la escena que se quiere mostrar.
+ * @returns {void}
+ */
 function mostrarEscena(id) {
   document.querySelectorAll('.scene').forEach(e => e.classList.remove('active'));
   document.getElementById(id).classList.add('active');
 }
 
-//estado inicial jugador
+
+/**
+ * Muestra el estado inicial del jugador (antes de comprar nada).
+ * Rellena el div con id "stats-inicial".
+ * @returns {void}
+ */
 function mostrarEstadoInicial() {
   let stats = `
     <p><strong>Nombre:</strong> ${jugador.nombre}</p>
@@ -44,7 +60,12 @@ function mostrarEstadoInicial() {
   document.getElementById("stats-inicial").innerHTML = stats;
 }
 
-// jugador tras mercado
+
+/**
+ * Muestra el estado del jugador después del mercado.
+ * Rellena el div con id "stats-actual".
+ * @returns {void}
+ */
 function mostrarEstadoActual() {
   let stats = `
     <p><strong>Nombre:</strong> ${jugador.nombre}</p>
@@ -57,7 +78,12 @@ function mostrarEstadoActual() {
   document.getElementById("stats-actual").innerHTML = stats;
 }
 
-// inventario
+
+/**
+ * Actualiza el inventario visual del footer.
+ * Si no hay objetos lo oculta, si hay los dibuja en las casillas.
+ * @returns {void}
+ */
 function actualizarInventario() {
   let contenedor = document.getElementById('inventory-container');
   if (jugador.inventario.length === 0) {
@@ -78,8 +104,11 @@ function actualizarInventario() {
   }
 }
 
+
 /**
- * aventura reino
+ * Carga el mercado con productos y descuentos aleatorios.
+ * Rellena el contenedor "market-container" con las tarjetas de producto.
+ * @returns {void}
  */
 function cargarMercado() {
   descuentos.común = Math.floor(Math.random() * 11);
@@ -109,6 +138,14 @@ function cargarMercado() {
   actualizarSeleccion();
 }
 
+
+/**
+ * Marca o desmarca un producto del mercado según se haga clic.
+ * @param {number} indice - Posición del producto en la lista.
+ * @param {Producto} prod - Producto asociado a la tarjeta.
+ * @param {HTMLDivElement} div - Elemento HTML de la tarjeta.
+ * @returns {void}
+ */
 function seleccionarProductoMercado(indice, prod, div) {
   let existe = seleccionados.find(sel => sel.indice === indice);
   if (existe) {
@@ -121,6 +158,12 @@ function seleccionarProductoMercado(indice, prod, div) {
   actualizarSeleccion();
 }
 
+
+/**
+ * Actualiza la lista de productos seleccionados y el total.
+ * Escribe el detalle en "selected-products" y el total en "total-price".
+ * @returns {void}
+ */
 function actualizarSeleccion() {
   let html = "";
   let total = 0;
@@ -136,6 +179,12 @@ function actualizarSeleccion() {
   document.getElementById('total-price').textContent = formatearPrecio(total);
 }
 
+
+/**
+ * Intenta comprar los productos seleccionados del mercado.
+ * Comprueba que haya selección y oro suficiente antes de comprar.
+ * @returns {void}
+ */
 function comprar() {
   if (seleccionados.length === 0) {
     alert("No has seleccionado nada");
@@ -154,7 +203,12 @@ function comprar() {
   mostrarEstadoActual();
 }
 
-// enemigos
+
+/**
+ * Carga la lista de enemigos más el jefe en la escena de enemigos.
+ * Rellena el contenedor "enemies-container".
+ * @returns {void}
+ */
 function cargarEnemigos() {
   let container = document.getElementById('enemies-container');
   container.innerHTML = "";
@@ -171,9 +225,16 @@ function cargarEnemigos() {
   });
 }
 
+
 // flujo de batallas, 1 por escena
 let rondaActual = 0;
 let resultadosBatallas = [];
+
+
+/**
+ * Prepara la escena de batallas y lanza la primera.
+ * @returns {void}
+ */
 function cargarBatallas() {
   mostrarEscena('battles');
   rondaActual = 0;
@@ -182,6 +243,12 @@ function cargarBatallas() {
   siguienteBatalla();
 }
 
+
+/**
+ * Ejecuta la siguiente batalla contra el siguiente enemigo o el jefe.
+ * Actualiza puntos, vida y muestra solo una batalla en pantalla.
+ * @returns {void}
+ */
 function siguienteBatalla() {
   let listaLucha = enemigos.concat([jefe]);
   if (rondaActual >= listaLucha.length || jugador.vida <= 0) {
@@ -227,10 +294,14 @@ function siguienteBatalla() {
     document.getElementById('btn-next-battle').classList.add('hidden');
     document.getElementById('btn-to-results').classList.remove('hidden');
   }
-
 }
 
-// resultados y ranking
+
+/**
+ * Muestra la pantalla de resultados finales:
+ * puntos, vida, items y ranking (Novato/Veterano).
+ * @returns {void}
+ */
 function mostrarResultados() {
   let ranking = obtenerRanking(jugador.puntos, UMBRAL_VETERANO);
   let mensaje = mostrarMensajeRanking(ranking);
@@ -244,6 +315,7 @@ function mostrarResultados() {
   mostrarEscena('results');
 }
 
+
 // botones
 document.getElementById('btn-to-market').onclick = () => { mostrarEscena('market'); cargarMercado(); };
 document.getElementById('btn-buy').onclick = comprar;
@@ -253,6 +325,7 @@ document.getElementById('btn-to-battles').onclick = cargarBatallas;
 document.getElementById('btn-next-battle').onclick = siguienteBatalla;
 document.getElementById('btn-to-results').onclick = mostrarResultados;
 document.getElementById('btn-restart').onclick = iniciarJuego;
+
 
 //inicio del juego
 iniciarJuego();
