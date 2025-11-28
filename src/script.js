@@ -312,8 +312,19 @@ function mostrarResultados() {
     <p><strong>Items comprados:</strong> ${jugador.inventario.length}</p>
     <p>${mensaje}</p>
   `;
+
+  // si superamos a los enemigos, lanzamos confetti
+  if (typeof confetti === "function" && jugador.vida > 0) {
+    confetti({
+      particleCount: 120,
+      spread: 70,
+      origin: { y: 0.6 }
+    });
+  }
+
   mostrarEscena('results');
 }
+
 
 
 // botones
