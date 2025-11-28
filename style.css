@@ -4,10 +4,15 @@
     --yellow: #f9f261;
     --white: #fff;
     --black: #191919;
-    --shadow: rgba(0, 0, 0, .07);
     --radius: 8px;
     --gap: 14px;
     --font-cartoon: 'Comic Sans MS', 'Comic Sans', cursive, 'Roboto', Arial, sans-serif;
+}
+
+html,
+body {
+    max-width: 100%;
+    overflow-x: hidden;
 }
 
 body {
@@ -27,6 +32,11 @@ header {
     color: var(--yellow);
     text-align: center;
     letter-spacing: 2px;
+}
+
+main {
+    padding: 0 8px 16px 8px;
+    box-sizing: border-box;
 }
 
 h2,
@@ -58,7 +68,7 @@ h3 {
     object-fit: contain;
 }
 
-
+/* ------- ANIMACIONES GENERALES ------- */
 @keyframes fadein {
     from {
         opacity: 0
@@ -69,10 +79,73 @@ h3 {
     }
 }
 
+@keyframes selected-pop {
+    0% {
+        transform: scale(0.95);
+    }
+
+    60% {
+        transform: scale(1.06);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+@keyframes slide-in-left {
+    0% {
+        transform: translateX(-130%) scale(1.1);
+        opacity: 0;
+    }
+
+    100% {
+        transform: translateX(0) scale(1);
+        opacity: 1;
+    }
+}
+
+@keyframes slide-in-right {
+    0% {
+        transform: translateX(130%) scale(1.1);
+        opacity: 0;
+    }
+
+    100% {
+        transform: translateX(0) scale(1);
+        opacity: 1;
+    }
+}
+
+.slide-in-left {
+    animation: slide-in-left 0.7s ease-out;
+}
+
+.slide-in-right {
+    animation: slide-in-right 0.7s ease-out;
+}
+
+@keyframes results-pop {
+    0% {
+        transform: scale(0.9) translateY(15px);
+        opacity: 0;
+    }
+
+    60% {
+        transform: scale(1.03) translateY(0);
+        opacity: 1;
+    }
+
+    100% {
+        transform: scale(1) translateY(0);
+        opacity: 1;
+    }
+}
+
 /* ------ MERCADO ------ */
 #market-container {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 22px;
     margin: 0 0 18px 0;
 }
@@ -89,6 +162,8 @@ h3 {
     padding: 17px 10px 12px 10px;
     transition: box-shadow .2s, background .20s, border .20s;
     min-height: 245px;
+    max-width: 100%;
+    box-sizing: border-box;
 }
 
 .product-item.selected,
@@ -96,6 +171,10 @@ h3 {
     background: var(--yellow);
     border: 4px solid var(--brown-dark);
     box-shadow: 0 8px 20px #311b02a0;
+}
+
+.product-item.selected {
+    animation: selected-pop 0.25s ease-out;
 }
 
 .product-item img {
@@ -113,12 +192,10 @@ h3 {
 
 .product-item p {
     margin: 1px 0;
-    text-align: center
+    text-align: center;
 }
 
-.product-item button,
-.btn-add,
-.btn-remove {
+.product-item button {
     background: var(--yellow);
     border: 2px solid var(--brown-dark);
     border-radius: 6px;
@@ -134,65 +211,19 @@ h3 {
 
 .product-item button:hover {
     background: var(--brown-dark);
-    color: var(--yellow)
-}
-
-.product-item .btn-remove {
-    background: var(--brown-light);
-    color: #683505;
-}
-
-.product-item .btn-remove:hover {
-    background: var(--danger-color);
-    color: #fff;
-}
-
-/* ------ PANEL JUGADOR ------ */
-.jugador-panel {
-    background: var(--brown-light);
-    border-radius: var(--radius);
-    border: 4px solid var(--brown-dark);
-    margin: 0 0 20px 0;
-    display: flex;
-    align-items: flex-start;
-    padding: 16px 20px;
-}
-
-.jugador-avatar {
-    width: 130px;
-    height: 130px;
-    border-radius: 16px;
-    object-fit: cover;
-    margin-right: 24px;
-    box-shadow: 0 6px 30px #0002;
-}
-
-.jugador-datos {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 18px;
-    width: 100%;
-}
-
-.jugador-datos .stat {
-    background: var(--brown-dark);
     color: var(--yellow);
-    border-radius: var(--radius);
-    font-size: 18px;
-    text-align: center;
-    padding: 18px 0 13px 0;
-    box-shadow: 0 3px 12px var(--brown-dark);
 }
 
 /* ------ ENEMIGOS ------ */
 #enemies-container {
     display: grid;
     gap: 24px;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     background: var(--brown-dark);
     padding: 22px 18px;
     border-radius: 14px;
     margin: 0 0 16px 0;
+    box-sizing: border-box;
 }
 
 .enemy-item {
@@ -207,12 +238,15 @@ h3 {
     align-items: center;
     justify-content: center;
     box-shadow: 0 2px 9px #311b0260;
+    max-width: 100%;
+    box-sizing: border-box;
 }
 
 .enemy-item img {
     width: 88px;
     min-height: 80px;
     margin-bottom: 5px;
+    object-fit: contain;
 }
 
 .enemy-item h3 {
@@ -224,7 +258,7 @@ h3 {
 .enemy-item p {
     font-size: 15px;
     margin-bottom: 2px;
-    color: #26190a
+    color: #26190a;
 }
 
 /* ------ BATALLA ------- */
@@ -237,12 +271,15 @@ h3 {
     border: 4px solid var(--brown-dark);
     margin-top: 18px;
     padding: 16px 8px;
+    box-sizing: border-box;
+    max-width: 100%;
 }
 
 .battle-vs-avatar {
     width: 135px;
     height: 135px;
     border-radius: 13px;
+    object-fit: contain;
 }
 
 .battle-vs-vs {
@@ -263,8 +300,10 @@ h3 {
     border: 0;
     box-shadow: 0 2px 22px #0002;
     padding: 26px 0;
+    box-sizing: border-box;
 }
 
+/* ------ RESULTADOS ------- */
 #results-container {
     background: var(--brown-dark);
     color: var(--yellow);
@@ -275,6 +314,8 @@ h3 {
     font-size: 24px;
     box-shadow: 0 6px 32px #1b090230;
     padding: 52px 10px 44px 10px;
+    animation: results-pop 0.6s ease-out;
+    box-sizing: border-box;
 }
 
 /* ------ INVENTARIO ------ */
@@ -289,7 +330,8 @@ h3 {
     min-height: 65px;
     margin: 18px auto 10px auto;
     max-width: 540px;
-    padding: 12px 0;
+    padding: 12px 8px;
+    box-sizing: border-box;
 }
 
 #inventory-container .item {
@@ -319,6 +361,7 @@ h3 {
     filter: brightness(1.2) drop-shadow(0 0 10px #fff4);
 }
 
+/* ----- CAJAS INFO ----- */
 .stats-box,
 .info-box {
     background: var(--brown-light);
@@ -330,8 +373,10 @@ h3 {
     padding: 15px 8px;
     font-family: var(--font-cartoon);
     text-align: center;
+    box-sizing: border-box;
 }
 
+/* ----- BOTONES ----- */
 button,
 .btn {
     background: var(--yellow);
@@ -344,7 +389,8 @@ button,
     margin-top: 8px;
     transition: background .18s, color .13s, transform .15s;
     min-width: 100px;
-    padding: 7px 0;
+    padding: 7px 10px;
+    box-sizing: border-box;
 }
 
 button:hover,
@@ -353,59 +399,4 @@ button:focus {
     background: var(--brown-dark);
     color: var(--yellow);
     transform: scale(1.08);
-}
-
-/* ------ RESPONSIVE ------ */
-@media (max-width: 1050px) {
-    #market-container {
-        grid-template-columns: repeat(2, 1fr);
-    }
-
-    #enemies-container {
-        grid-template-columns: 1fr;
-    }
-}
-
-@media (max-width: 600px) {
-    #market-container {
-        grid-template-columns: 1fr;
-    }
-
-    .jugador-panel {
-        flex-direction: column;
-        align-items: center;
-    }
-
-    .jugador-avatar {
-        margin: 0;
-        margin-bottom: 20px;
-    }
-
-    #inventory-container {
-        max-width: 320px;
-    }
-}
-
-@media (max-width: 420px) {
-    button {
-        min-width: 70px;
-    }
-
-    .product-item {
-        padding: 6px;
-    }
-
-    .enemy-item {
-        padding: 5px;
-    }
-}
-
-::-webkit-scrollbar-thumb {
-    background: var(--brown-dark);
-    border-radius: 10px;
-}
-
-::-webkit-scrollbar {
-    width: 8px;
-    background: var(--brown-light);
 }
