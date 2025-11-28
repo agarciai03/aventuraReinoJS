@@ -400,3 +400,62 @@ button:focus {
     color: var(--yellow);
     transform: scale(1.08);
 }
+
+/* ------ RESPONSIVE ------ */
+
+/* 1024 px  */
+@media (max-width: 1024px) {
+    #market-container {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    #enemies-container {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+/* 720 px  */
+@media (max-width: 720px) {
+    #market-container {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    #enemies-container {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* 360 px  */
+@media (max-width: 360px) {
+    #market-container {
+        grid-template-columns: 1fr;
+    }
+
+    #player-image {
+        margin: 16px auto 8px auto;
+    }
+
+    #inventory-container {
+        max-width: 320px;
+    }
+
+    button {
+        min-width: 80px;
+        font-size: 15px;
+    }
+
+    .product-item,
+    .enemy-item {
+        padding: 10px 6px;
+    }
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--brown-dark);
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar {
+    width: 8px;
+    background: var(--brown-light);
+}
