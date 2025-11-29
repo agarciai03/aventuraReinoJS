@@ -131,12 +131,23 @@ function cargarMercado() {
       <p>${prod.tipo} - ${prod.rareza}</p>
       <p>Precio: ${formatearPrecio(prod.precio)} (${descuentos[prod.rareza]}% dto.)</p>
       <p>${prod.mostrarBonus()}</p>
+      <button class="product-btn" data-indice="${i}">Añadir</button>
     `;
-    div.onclick = () => seleccionarProductoMercado(i, prod, div);
     contenedor.appendChild(div);
   });
+
+  // eventos en los botones de mercado
+  contenedor.querySelectorAll(".product-btn").forEach(btn => {
+    btn.onclick = () => {
+      const indice = Number(btn.dataset.indice);
+      const prod = listaDescuento[indice];
+      seleccionarProductoMercado(indice, prod, btn.closest(".product-item"), btn);
+    };
+  });
+
   actualizarSeleccion();
 }
+
 
 
 /**
@@ -146,17 +157,30 @@ function cargarMercado() {
  * @param {HTMLDivElement} div - Elemento HTML de la tarjeta.
  * @returns {void}
  */
-function seleccionarProductoMercado(indice, prod, div) {
+/**
+ * Marca o desmarca un producto del mercado según se haga clic.
+ * @param {number} indice - Posición del producto en la lista.
+ * @param {Producto} prod - Producto asociado a la tarjeta.
+ * @param {HTMLDivElement} div - Tarjeta del producto.
+ * @param {HTMLButtonElement} boton - Botón Añadir/Retirar de la tarjeta.
+ * @returns {void}
+ */
+function seleccionarProductoMercado(indice, prod, div, boton) {
   let existe = seleccionados.find(sel => sel.indice === indice);
   if (existe) {
+    // quitamos de la cesta
     seleccionados = seleccionados.filter(sel => sel.indice !== indice);
     div.classList.remove('selected');
+    boton.textContent = "Añadir";
   } else {
+    // añadimos a la cesta
     seleccionados.push({ indice: indice, producto: prod });
     div.classList.add('selected');
+    boton.textContent = "Retirar";
   }
   actualizarSeleccion();
 }
+
 
 
 /**
