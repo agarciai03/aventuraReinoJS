@@ -1,14 +1,22 @@
 :root {
-    --brown-dark: #6e4e19;
-    --brown-light: #cfa962;
-    --yellow: #f9f261;
-    --white: #fff;
-    --black: #191919;
-    --radius: 8px;
-    --gap: 14px;
-    --font-cartoon: 'Comic Sans MS', 'Comic Sans', cursive, 'Roboto', Arial, sans-serif;
+    --color-brown-dark: #6e4e19;
+    --color-brown-light: #cfa962;
+    --color-yellow: #f9f261;
+    --color-white: #ffffff;
+    --color-black: #191919;
+    --font-main: 'Comic Sans MS', 'Comic Sans', cursive, 'Roboto', Arial, sans-serif;
+    --font-size-title: 29px;
+    --font-size-subtitle: 22px;
+    --font-size-text: 16px;
+    --spacing-small: 8px;
+    --spacing-medium: 14px;
+    --spacing-large: 22px;
+    --radius-small: 6px;
+    --radius-medium: 8px;
 }
 
+
+/* No scroll horizontal */
 html,
 body {
     max-width: 100%;
@@ -16,35 +24,34 @@ body {
 }
 
 body {
-    background: var(--brown-light);
-    font-family: var(--font-cartoon);
-    color: var(--black);
+    background: var(--color-brown-light);
+    font-family: var(--font-main);
+    color: var(--color-black);
     min-height: 100vh;
     margin: 0;
 }
 
+
 /* ----- HEADER ----- */
 header {
-    font-family: var(--font-cartoon);
-    font-size: 29px;
+    font-size: var(--font-size-title);
     padding: 20px 0 10px 0;
-    background: var(--brown-dark);
-    color: var(--yellow);
+    background: var(--color-brown-dark);
+    color: var(--color-yellow);
     text-align: center;
     letter-spacing: 2px;
 }
 
 main {
-    padding: 0 8px 16px 8px;
+    padding: 0 var(--spacing-small) 16px var(--spacing-small);
     box-sizing: border-box;
 }
 
 h2,
 h3 {
-    color: var(--brown-dark);
-    font-family: var(--font-cartoon);
-    margin-bottom: 14px;
-    margin-top: 8px;
+    color: var(--color-brown-dark);
+    margin: 8px 0 var(--spacing-medium) 0;
+    font-size: var(--font-size-subtitle);
 }
 
 .scene {
@@ -53,7 +60,7 @@ h3 {
 
 .scene.active {
     display: block;
-    animation: fadein .9s;
+    animation: aparecer-suave 0.9s;
 }
 
 #player-image {
@@ -64,22 +71,22 @@ h3 {
     display: block;
     margin: 24px 0 8px 24px;
     border-radius: 12px;
-    box-shadow: 0 4px 22px #322 0.18;
     object-fit: contain;
 }
 
+
 /* ------- ANIMACIONES GENERALES ------- */
-@keyframes fadein {
+@keyframes aparecer-suave {
     from {
-        opacity: 0
+        opacity: 0;
     }
 
     to {
-        opacity: 1
+        opacity: 1;
     }
 }
 
-@keyframes selected-pop {
+@keyframes producto-seleccionado {
     0% {
         transform: scale(0.95);
     }
@@ -93,7 +100,7 @@ h3 {
     }
 }
 
-@keyframes slide-in-left {
+@keyframes entrar-izquierda {
     0% {
         transform: translateX(-130%) scale(1.1);
         opacity: 0;
@@ -105,7 +112,7 @@ h3 {
     }
 }
 
-@keyframes slide-in-right {
+@keyframes entrar-derecha {
     0% {
         transform: translateX(130%) scale(1.1);
         opacity: 0;
@@ -117,15 +124,15 @@ h3 {
     }
 }
 
-.slide-in-left {
-    animation: slide-in-left 0.7s ease-out;
+.entrar-izquierda {
+    animation: entrar-izquierda 0.7s ease-out;
 }
 
-.slide-in-right {
-    animation: slide-in-right 0.7s ease-out;
+.entrar-derecha {
+    animation: entrar-derecha 0.7s ease-out;
 }
 
-@keyframes results-pop {
+@keyframes resultado-pop {
     0% {
         transform: scale(0.9) translateY(15px);
         opacity: 0;
@@ -142,47 +149,46 @@ h3 {
     }
 }
 
+
 /* ------ MERCADO ------ */
 #market-container {
     display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 22px;
-    margin: 0 0 18px 0;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--spacing-large);
+    margin-bottom: 18px;
 }
 
 .product-item {
-    background: var(--white);
-    border: 3.5px solid var(--brown-dark);
-    border-radius: var(--radius);
-    box-shadow: 0 4px 0 var(--brown-light);
+    background: var(--color-white);
+    border: 3px solid var(--color-brown-dark);
+    border-radius: var(--radius-medium);
+    box-shadow: 0 4px 0 var(--color-brown-light);
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: space-between;
     padding: 17px 10px 12px 10px;
-    transition: box-shadow .2s, background .20s, border .20s;
     min-height: 245px;
-    max-width: 100%;
     box-sizing: border-box;
+    transition: box-shadow 0.2s, background 0.2s, border 0.2s;
 }
 
 .product-item.selected,
 .product-item:hover {
-    background: var(--yellow);
-    border: 4px solid var(--brown-dark);
+    background: var(--color-yellow);
+    border-width: 4px;
     box-shadow: 0 8px 20px #311b02a0;
 }
 
 .product-item.selected {
-    animation: selected-pop 0.25s ease-out;
+    animation: producto-seleccionado 0.25s ease-out;
 }
 
 .product-item img {
     width: 85px;
     max-height: 88px;
-    margin-bottom: 10px;
-    margin-top: 6px;
-    border-radius: 6px;
+    margin: 6px 0 10px 0;
+    border-radius: var(--radius-small);
 }
 
 .product-item h4 {
@@ -196,40 +202,40 @@ h3 {
 }
 
 .product-item button {
-    background: var(--yellow);
-    border: 2px solid var(--brown-dark);
-    border-radius: 6px;
-    color: var(--black);
+    background: var(--color-yellow);
+    border: 2px solid var(--color-brown-dark);
+    border-radius: var(--radius-small);
+    color: var(--color-black);
     font-weight: bold;
-    font-family: var(--font-cartoon);
     font-size: 15px;
     margin-top: 7px;
     padding: 6px 16px;
     cursor: pointer;
-    transition: background .18s;
+    transition: background 0.18s;
 }
 
 .product-item button:hover {
-    background: var(--brown-dark);
-    color: var(--yellow);
+    background: var(--color-brown-dark);
+    color: var(--color-yellow);
 }
+
 
 /* ------ ENEMIGOS ------ */
 #enemies-container {
     display: grid;
     gap: 24px;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    background: var(--brown-dark);
+    grid-template-columns: repeat(2, 1fr);
+    background: var(--color-brown-dark);
     padding: 22px 18px;
     border-radius: 14px;
-    margin: 0 0 16px 0;
+    margin-bottom: 16px;
     box-sizing: border-box;
 }
 
 .enemy-item {
-    background: var(--white);
-    border: 3px solid var(--brown-dark);
-    border-radius: var(--radius);
+    background: var(--color-white);
+    border: 3px solid var(--color-brown-dark);
+    border-radius: var(--radius-medium);
     text-align: center;
     padding: 13px;
     min-height: 194px;
@@ -238,7 +244,6 @@ h3 {
     align-items: center;
     justify-content: center;
     box-shadow: 0 2px 9px #311b0260;
-    max-width: 100%;
     box-sizing: border-box;
 }
 
@@ -251,28 +256,28 @@ h3 {
 
 .enemy-item h3 {
     font-size: 18px;
-    color: var(--brown-dark);
+    color: var(--color-brown-dark);
     margin-bottom: 6px;
 }
 
 .enemy-item p {
-    font-size: 15px;
+    font-size: var(--font-size-text);
     margin-bottom: 2px;
     color: #26190a;
 }
+
 
 /* ------ BATALLA ------- */
 .battle-vs-row {
     display: flex;
     justify-content: space-around;
     align-items: center;
-    background: var(--brown-light);
+    background: var(--color-brown-light);
     border-radius: 10px;
-    border: 4px solid var(--brown-dark);
+    border: 4px solid var(--color-brown-dark);
     margin-top: 18px;
     padding: 16px 8px;
     box-sizing: border-box;
-    max-width: 100%;
 }
 
 .battle-vs-avatar {
@@ -284,29 +289,30 @@ h3 {
 
 .battle-vs-vs {
     font-size: 32px;
-    font-family: var(--font-cartoon);
+    font-family: var(--font-main);
     font-weight: bold;
-    color: var(--brown-dark);
+    color: var(--color-brown-dark);
 }
 
 .battle-item {
-    background: var(--brown-dark);
-    color: var(--yellow);
+    background: var(--color-brown-dark);
+    color: var(--color-yellow);
     border-radius: 12px;
     font-size: 22px;
     margin: 22px auto 10px auto;
     width: 95%;
     text-align: center;
-    border: 0;
+    border: none;
     box-shadow: 0 2px 22px #0002;
     padding: 26px 0;
     box-sizing: border-box;
 }
 
+
 /* ------ RESULTADOS ------- */
 #results-container {
-    background: var(--brown-dark);
-    color: var(--yellow);
+    background: var(--color-brown-dark);
+    color: var(--color-yellow);
     border-radius: 12px;
     margin: 36px auto 8px auto;
     width: 95%;
@@ -314,13 +320,14 @@ h3 {
     font-size: 24px;
     box-shadow: 0 6px 32px #1b090230;
     padding: 52px 10px 44px 10px;
-    animation: results-pop 0.6s ease-out;
     box-sizing: border-box;
+    animation: resultado-pop 0.6s ease-out;
 }
+
 
 /* ------ INVENTARIO ------ */
 #inventory-container {
-    background: var(--brown-dark);
+    background: var(--color-brown-dark);
     border: 4px solid #312211;
     border-radius: 6px;
     display: flex;
@@ -337,8 +344,8 @@ h3 {
 #inventory-container .item {
     width: 60px;
     height: 65px;
-    background: var(--brown-light);
-    border-radius: 6px;
+    background: var(--color-brown-light);
+    border-radius: var(--radius-small);
     border: 2.5px solid #a08453;
     box-shadow: 0 2px 13px #e6ca9a7a inset;
     display: flex;
@@ -353,7 +360,7 @@ h3 {
     display: block;
     border: none;
     background: transparent;
-    transition: transform .25s;
+    transition: transform 0.25s;
 }
 
 #inventory-container .item img:hover {
@@ -361,69 +368,74 @@ h3 {
     filter: brightness(1.2) drop-shadow(0 0 10px #fff4);
 }
 
+
 /* ----- CAJAS INFO ----- */
 .stats-box,
 .info-box {
-    background: var(--brown-light);
-    border-radius: 6px;
+    background: var(--color-brown-light);
+    border-radius: var(--radius-small);
     margin: 14px 0;
-    border: 2.5px solid var(--brown-dark);
-    color: var(--brown-dark);
+    border: 2.5px solid var(--color-brown-dark);
+    color: var(--color-brown-dark);
     box-shadow: 0 1px 10px #9c843320;
     padding: 15px 8px;
-    font-family: var(--font-cartoon);
     text-align: center;
     box-sizing: border-box;
 }
 
+
 /* ----- BOTONES ----- */
 button,
 .btn {
-    background: var(--yellow);
-    color: var(--brown-dark);
-    border: 2px solid var(--brown-dark);
+    background: var(--color-yellow);
+    color: var(--color-brown-dark);
+    border: 2px solid var(--color-brown-dark);
     border-radius: 7px;
-    font-family: var(--font-cartoon);
+    font-family: var(--font-main);
     font-size: 17px;
     box-shadow: 0 2px 1px #efd66260;
     margin-top: 8px;
-    transition: background .18s, color .13s, transform .15s;
     min-width: 100px;
     padding: 7px 10px;
     box-sizing: border-box;
+    transition: background 0.18s, color 0.13s, transform 0.15s;
 }
 
 button:hover,
 .btn:hover,
 button:focus {
-    background: var(--brown-dark);
-    color: var(--yellow);
+    background: var(--color-brown-dark);
+    color: var(--color-yellow);
     transform: scale(1.08);
 }
 
+
 /* ------ RESPONSIVE ------ */
+
 
 /* 1024 px  */
 @media (max-width: 1024px) {
     #market-container {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
+        grid-template-columns: repeat(2, 1fr);
     }
 
     #enemies-container {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
+        grid-template-columns: repeat(2, 1fr);
     }
 }
+
 
 /* 720 px  */
 @media (max-width: 720px) {
     #market-container {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
+        grid-template-columns: repeat(2, 1fr);
     }
 
     #enemies-container {
         grid-template-columns: 1fr;
     }
 }
+
 
 /* 360 px  */
 @media (max-width: 360px) {
@@ -451,11 +463,11 @@ button:focus {
 }
 
 ::-webkit-scrollbar-thumb {
-    background: var(--brown-dark);
+    background: var(--color-brown-dark);
     border-radius: 10px;
 }
 
 ::-webkit-scrollbar {
     width: 8px;
-    background: var(--brown-light);
+    background: var(--color-brown-light);
 }

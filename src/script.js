@@ -122,6 +122,7 @@ function cargarMercado() {
   let listaDescuento = productosDisponibles.map(prod => prod.aplicarDescuento(descuentos[prod.rareza] || 0));
   let contenedor = document.getElementById('market-container');
   contenedor.innerHTML = "";
+
   listaDescuento.forEach((prod, i) => {
     let div = document.createElement("div");
     div.className = "product-item";
@@ -141,7 +142,8 @@ function cargarMercado() {
     btn.onclick = () => {
       const indice = Number(btn.dataset.indice);
       const prod = listaDescuento[indice];
-      seleccionarProductoMercado(indice, prod, btn.closest(".product-item"), btn);
+      const tarjeta = btn.closest(".product-item");
+      seleccionarProductoMercado(indice, prod, tarjeta, btn);
     };
   });
 
@@ -149,20 +151,12 @@ function cargarMercado() {
 }
 
 
-
-/**
- * Marca o desmarca un producto del mercado según se haga clic.
- * @param {number} indice - Posición del producto en la lista.
- * @param {Producto} prod - Producto asociado a la tarjeta.
- * @param {HTMLDivElement} div - Elemento HTML de la tarjeta.
- * @returns {void}
- */
 /**
  * Marca o desmarca un producto del mercado según se haga clic.
  * @param {number} indice - Posición del producto en la lista.
  * @param {Producto} prod - Producto asociado a la tarjeta.
  * @param {HTMLDivElement} div - Tarjeta del producto.
- * @param {HTMLButtonElement} boton - Botón Añadir/Retirar de la tarjeta.
+ * @param {HTMLButtonElement} boton - Botón Añadir/Retirar.
  * @returns {void}
  */
 function seleccionarProductoMercado(indice, prod, div, boton) {
@@ -180,7 +174,6 @@ function seleccionarProductoMercado(indice, prod, div, boton) {
   }
   actualizarSeleccion();
 }
-
 
 
 /**
@@ -250,6 +243,7 @@ function cargarEnemigos() {
 }
 
 
+
 // flujo de batallas, 1 por escena
 let rondaActual = 0;
 let resultadosBatallas = [];
@@ -292,13 +286,13 @@ function siguienteBatalla() {
     jugador.vida = 0;
   }
 
-  // solo aparece una batalla a la vez
+  // solo aparece una batalla a la vez 
   let battlesDiv = document.getElementById("battles-container");
   battlesDiv.innerHTML = `
     <div class="battle-vs-row">
-      <img class="battle-vs-avatar slide-in-left" src="${jugador.avatar}" alt="Jugador" style="margin-right:18px;">
+      <img class="battle-vs-avatar entrar-izquierda" src="${jugador.avatar}" alt="Jugador" style="margin-right:18px;">
       <span class="battle-vs-vs">vs</span>
-      <img class="battle-vs-avatar slide-in-right" src="${enemigo.avatar}" alt="${enemigo.nombre}" style="margin-left:18px;">
+      <img class="battle-vs-avatar entrar-derecha" src="${enemigo.avatar}" alt="${enemigo.nombre}" style="margin-left:18px;">
     </div>
     <div class="battle-item">
       <div class="result-text ${resultado.ganador === "jugador" ? "winner" : "loser"}">
@@ -348,7 +342,6 @@ function mostrarResultados() {
 
   mostrarEscena('results');
 }
-
 
 
 // botones
