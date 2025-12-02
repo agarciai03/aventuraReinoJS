@@ -265,7 +265,6 @@ function cargarBatallas() {
   siguienteBatalla();
 }
 
-
 /**
  * Ejecuta la siguiente batalla contra el siguiente enemigo o el jefe.
  * Actualiza puntos, vida y muestra solo una batalla en pantalla.
@@ -282,7 +281,7 @@ function siguienteBatalla() {
   let resultado = combate(jugador, enemigo);
   resultadosBatallas.push(resultado);
 
-  // Suma puntos 
+  // Suma puntos
   if (resultado.ganador === "jugador") {
     jugador.sumarPuntos(resultado.puntos);
     jugador.vida = jugador.obtenerVidaTotal();
@@ -309,7 +308,9 @@ function siguienteBatalla() {
   `;
 
   rondaActual++;
-  if (rondaActual < listaLucha.length && jugador.vida > 0) {
+
+  // Mostrar/ocultar botones según el estado del jugador
+  if (jugador.vida > 0 && rondaActual < listaLucha.length) {
     document.getElementById('btn-next-battle').classList.remove('hidden');
     document.getElementById('btn-to-results').classList.add('hidden');
   } else {
@@ -325,7 +326,14 @@ function siguienteBatalla() {
  * @returns {void}
  */
 function mostrarResultados() {
-  let ranking = obtenerRanking(jugador.puntos, UMBRAL_VETERANO);
+  let listaLucha = enemigos.concat([jefe]);
+  let ranking = "Novato"; // por defecto el jugador es un novato
+
+  // Cambiar el ranking solo si el jugador derrota al jefe final
+  if (jugador.vida > 0 && rondaActual === listaLucha.length && resultadosBatallas[resultadosBatallas.length - 1].ganador === "jugador") {
+    ranking = obtenerRanking(jugador.puntos, UMBRAL_VETERANO);
+  }
+
   let mensaje = mostrarMensajeRanking(ranking);
   document.getElementById('results-container').innerHTML = `
     <h3>${ranking}</h3>
