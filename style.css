@@ -63,16 +63,43 @@ h3 {
     animation: aparecer-suave 0.9s;
 }
 
-#player-image {
-    width: 145px;
-    height: 145px;
-    max-width: 85vw;
-    max-height: 28vh;
-    display: block;
+#player-image,
+#player-image-actual {
+    width: 150px;
+    height: 150px;
+    max-width: 50vw;
+    max-height: 20vh;
     margin: 24px 0 8px 24px;
     border-radius: 12px;
     object-fit: contain;
 }
+
+/* layout de la escena inicial y actual: imagen + tarjetas */
+.initial-layout {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 18px;
+    align-items: flex-start;
+}
+
+/* cuadricula de tarjetas de stats */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 180px));
+    gap: 12px;
+    justify-content: center;
+}
+
+/* tarjeta individual de estadística */
+.stats-card {
+    background: var(--color-brown-light);
+    border: 2px solid var(--color-brown-dark);
+    border-radius: 8px;
+    padding: 12px 10px;
+    text-align: center;
+    box-shadow: 0 2px 8px #0002;
+}
+
 
 
 /* ------- ANIMACIONES GENERALES ------- */
@@ -446,6 +473,11 @@ button:focus {
     #player-image {
         margin: 16px auto 8px auto;
     }
+
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
+
 
     #inventory-container {
         max-width: 320px;

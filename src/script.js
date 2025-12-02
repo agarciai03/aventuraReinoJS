@@ -49,15 +49,17 @@ function mostrarEscena(id) {
  * @returns {void}
  */
 function mostrarEstadoInicial() {
-  let stats = `
-    <p><strong>Nombre:</strong> ${jugador.nombre}</p>
-    <p><strong>Vida:</strong> ${jugador.vida}</p>
-    <p><strong>Ataque:</strong> ${jugador.obtenerAtaqueTotal()}</p>
-    <p><strong>Defensa:</strong> ${jugador.obtenerDefensaTotal()}</p>
-    <p><strong>Oro:</strong> ${oro}</p>
-    <p><strong>Items:</strong> ${jugador.inventario.length}</p>
-  `;
-  document.getElementById("stats-inicial").innerHTML = stats;
+  document.getElementById("stat-vida-inicial").textContent = jugador.vida;
+  document.getElementById("stat-ataque-inicial").textContent = jugador.obtenerAtaqueTotal();
+  document.getElementById("stat-defensa-inicial").textContent = jugador.obtenerDefensaTotal();
+  document.getElementById("stat-oro-inicial").textContent = oro;
+  document.getElementById("stat-items-inicial").textContent = jugador.inventario.length;
+
+  const imgInicial = document.getElementById("player-image");
+  if (imgInicial) {
+    imgInicial.src = jugador.avatar;
+    imgInicial.alt = jugador.nombre;
+  }
 }
 
 
@@ -67,15 +69,17 @@ function mostrarEstadoInicial() {
  * @returns {void}
  */
 function mostrarEstadoActual() {
-  let stats = `
-    <p><strong>Nombre:</strong> ${jugador.nombre}</p>
-    <p><strong>Vida:</strong> ${jugador.vida}</p>
-    <p><strong>Ataque:</strong> ${jugador.obtenerAtaqueTotal()}</p>
-    <p><strong>Defensa:</strong> ${jugador.obtenerDefensaTotal()}</p>
-    <p><strong>Oro:</strong> ${oro}</p>
-    <p><strong>Items:</strong> ${jugador.inventario.length}</p>
-  `;
-  document.getElementById("stats-actual").innerHTML = stats;
+  document.getElementById("stat-vida-actual").textContent = jugador.vida;
+  document.getElementById("stat-ataque-actual").textContent = jugador.obtenerAtaqueTotal();
+  document.getElementById("stat-defensa-actual").textContent = jugador.obtenerDefensaTotal();
+  document.getElementById("stat-oro-actual").textContent = oro;
+  document.getElementById("stat-items-actual").textContent = jugador.inventario.length;
+
+  const imgActual = document.getElementById("player-image-actual");
+  if (imgActual) {
+    imgActual.src = jugador.avatar;
+    imgActual.alt = jugador.nombre;
+  }
 }
 
 
@@ -334,7 +338,7 @@ function mostrarResultados() {
   // si superamos a los enemigos, lanzamos confetti
   if (typeof confetti === "function" && jugador.vida > 0) {
     confetti({
-      particleCount: 120,
+      particleCount: 200,
       spread: 70,
       origin: { y: 0.6 }
     });

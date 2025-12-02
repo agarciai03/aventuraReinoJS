@@ -16,12 +16,36 @@
     </header>
     <main>
         <!-- ESCENA INICIAL DEL JUGADOR -->
-        <div id="initial" class="scene active">
+        <section id="initial" class="scene active">
             <h2>Estado inicial del jugador</h2>
-            <img src="img/personaje.png" alt="Avatar del jugador" id="player-image">
-            <div class="stats-box" id="stats-inicial"></div>
-            <button id="btn-to-market">Ir al mercado</button>
-        </div>
+
+            <div class="initial-layout">
+                <img id="player-image" src="img/personaje.png" alt="Jugador">
+
+                <div class="stats-grid">
+                    <div class="stats-card">
+                        <p><strong>Nombre:</strong> Aventurero</p>
+                    </div>
+                    <div class="stats-card">
+                        <p><strong>Vida:</strong> <span id="stat-vida-inicial">100</span></p>
+                    </div>
+                    <div class="stats-card">
+                        <p><strong>Ataque:</strong> <span id="stat-ataque-inicial">0</span></p>
+                    </div>
+                    <div class="stats-card">
+                        <p><strong>Defensa:</strong> <span id="stat-defensa-inicial">0</span></p>
+                    </div>
+                    <div class="stats-card">
+                        <p><strong>Oro:</strong> <span id="stat-oro-inicial">500</span></p>
+                    </div>
+                    <div class="stats-card">
+                        <p><strong>Items:</strong> <span id="stat-items-inicial">0</span></p>
+                    </div>
+                </div>
+            </div>
+
+            <button id="btn-to-market" class="btn">Ir al mercado</button>
+        </section>
 
         <!-- ESCENA MERCADO -->
         <div id="market" class="scene">
@@ -42,11 +66,37 @@
         </div>
 
         <!-- ESCENA ESTADO JUGADOR TRAS MERCADO -->
-        <div id="player" class="scene">
+        <!-- ESCENA 3: ESTADO ACTUAL TRAS EL MERCADO -->
+        <section id="player" class="scene">
             <h2>Estado actual del jugador</h2>
-            <div class="stats-box" id="stats-actual"></div>
-            <button id="btn-to-enemies">Continuar</button>
-        </div>
+
+            <div class="initial-layout">
+                <img id="player-image-actual" src="img/personaje.png" alt="Jugador">
+
+                <div class="stats-grid">
+                    <div class="stats-card">
+                        <p><strong>Nombre:</strong> Aventurero</p>
+                    </div>
+                    <div class="stats-card">
+                        <p><strong>Vida:</strong> <span id="stat-vida-actual">100</span></p>
+                    </div>
+                    <div class="stats-card">
+                        <p><strong>Ataque:</strong> <span id="stat-ataque-actual">0</span></p>
+                    </div>
+                    <div class="stats-card">
+                        <p><strong>Defensa:</strong> <span id="stat-defensa-actual">0</span></p>
+                    </div>
+                    <div class="stats-card">
+                        <p><strong>Oro:</strong> <span id="stat-oro-actual">500</span></p>
+                    </div>
+                    <div class="stats-card">
+                        <p><strong>Items:</strong> <span id="stat-items-actual">0</span></p>
+                    </div>
+                </div>
+            </div>
+
+            <button id="btn-to-enemies" class="btn">Continuar</button>
+        </section>
 
         <!-- ESCENA ENEMIGOS -->
         <div id="enemies" class="scene">
