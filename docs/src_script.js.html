@@ -77,15 +77,17 @@ function mostrarEscena(id) {
  * @returns {void}
  */
 function mostrarEstadoInicial() {
-  let stats = `
-    &lt;p>&lt;strong>Nombre:&lt;/strong> ${jugador.nombre}&lt;/p>
-    &lt;p>&lt;strong>Vida:&lt;/strong> ${jugador.vida}&lt;/p>
-    &lt;p>&lt;strong>Ataque:&lt;/strong> ${jugador.obtenerAtaqueTotal()}&lt;/p>
-    &lt;p>&lt;strong>Defensa:&lt;/strong> ${jugador.obtenerDefensaTotal()}&lt;/p>
-    &lt;p>&lt;strong>Oro:&lt;/strong> ${oro}&lt;/p>
-    &lt;p>&lt;strong>Items:&lt;/strong> ${jugador.inventario.length}&lt;/p>
-  `;
-  document.getElementById("stats-inicial").innerHTML = stats;
+  document.getElementById("stat-vida-inicial").textContent = jugador.vida;
+  document.getElementById("stat-ataque-inicial").textContent = jugador.obtenerAtaqueTotal();
+  document.getElementById("stat-defensa-inicial").textContent = jugador.obtenerDefensaTotal();
+  document.getElementById("stat-oro-inicial").textContent = oro;
+  document.getElementById("stat-items-inicial").textContent = jugador.inventario.length;
+
+  const imgInicial = document.getElementById("player-image");
+  if (imgInicial) {
+    imgInicial.src = jugador.avatar;
+    imgInicial.alt = jugador.nombre;
+  }
 }
 
 
@@ -95,15 +97,17 @@ function mostrarEstadoInicial() {
  * @returns {void}
  */
 function mostrarEstadoActual() {
-  let stats = `
-    &lt;p>&lt;strong>Nombre:&lt;/strong> ${jugador.nombre}&lt;/p>
-    &lt;p>&lt;strong>Vida:&lt;/strong> ${jugador.vida}&lt;/p>
-    &lt;p>&lt;strong>Ataque:&lt;/strong> ${jugador.obtenerAtaqueTotal()}&lt;/p>
-    &lt;p>&lt;strong>Defensa:&lt;/strong> ${jugador.obtenerDefensaTotal()}&lt;/p>
-    &lt;p>&lt;strong>Oro:&lt;/strong> ${oro}&lt;/p>
-    &lt;p>&lt;strong>Items:&lt;/strong> ${jugador.inventario.length}&lt;/p>
-  `;
-  document.getElementById("stats-actual").innerHTML = stats;
+  document.getElementById("stat-vida-actual").textContent = jugador.vida;
+  document.getElementById("stat-ataque-actual").textContent = jugador.obtenerAtaqueTotal();
+  document.getElementById("stat-defensa-actual").textContent = jugador.obtenerDefensaTotal();
+  document.getElementById("stat-oro-actual").textContent = oro;
+  document.getElementById("stat-items-actual").textContent = jugador.inventario.length;
+
+  const imgActual = document.getElementById("player-image-actual");
+  if (imgActual) {
+    imgActual.src = jugador.avatar;
+    imgActual.alt = jugador.nombre;
+  }
 }
 
 
@@ -150,6 +154,7 @@ function cargarMercado() {
   let listaDescuento = productosDisponibles.map(prod => prod.aplicarDescuento(descuentos[prod.rareza] || 0));
   let contenedor = document.getElementById('market-container');
   contenedor.innerHTML = "";
+
   listaDescuento.forEach((prod, i) => {
     let div = document.createElement("div");
     div.className = "product-item";
@@ -169,7 +174,8 @@ function cargarMercado() {
     btn.onclick = () => {
       const indice = Number(btn.dataset.indice);
       const prod = listaDescuento[indice];
-      seleccionarProductoMercado(indice, prod, btn.closest(".product-item"), btn);
+      const tarjeta = btn.closest(".product-item");
+      seleccionarProductoMercado(indice, prod, tarjeta, btn);
     };
   });
 
@@ -177,20 +183,12 @@ function cargarMercado() {
 }
 
 
-
-/**
- * Marca o desmarca un producto del mercado según se haga clic.
- * @param {number} indice - Posición del producto en la lista.
- * @param {Producto} prod - Producto asociado a la tarjeta.
- * @param {HTMLDivElement} div - Elemento HTML de la tarjeta.
- * @returns {void}
- */
 /**
  * Marca o desmarca un producto del mercado según se haga clic.
  * @param {number} indice - Posición del producto en la lista.
  * @param {Producto} prod - Producto asociado a la tarjeta.
  * @param {HTMLDivElement} div - Tarjeta del producto.
- * @param {HTMLButtonElement} boton - Botón Añadir/Retirar de la tarjeta.
+ * @param {HTMLButtonElement} boton - Botón Añadir/Retirar.
  * @returns {void}
  */
 function seleccionarProductoMercado(indice, prod, div, boton) {
@@ -208,7 +206,6 @@ function seleccionarProductoMercado(indice, prod, div, boton) {
   }
   actualizarSeleccion();
 }
-
 
 
 /**
@@ -278,6 +275,7 @@ function cargarEnemigos() {
 }
 
 
+
 // flujo de batallas, 1 por escena
 let rondaActual = 0;
 let resultadosBatallas = [];
@@ -295,7 +293,6 @@ function cargarBatallas() {
   siguienteBatalla();
 }
 
-
 /**
  * Ejecuta la siguiente batalla contra el siguiente enemigo o el jefe.
  * Actualiza puntos, vida y muestra solo una batalla en pantalla.
@@ -312,7 +309,7 @@ function siguienteBatalla() {
   let resultado = combate(jugador, enemigo);
   resultadosBatallas.push(resultado);
 
-  // Suma puntos 
+  // Suma puntos
   if (resultado.ganador === "jugador") {
     jugador.sumarPuntos(resultado.puntos);
     jugador.vida = jugador.obtenerVidaTotal();
@@ -320,13 +317,13 @@ function siguienteBatalla() {
     jugador.vida = 0;
   }
 
-  // solo aparece una batalla a la vez
+  // solo aparece una batalla a la vez 
   let battlesDiv = document.getElementById("battles-container");
   battlesDiv.innerHTML = `
     &lt;div class="battle-vs-row">
-      &lt;img class="battle-vs-avatar slide-in-left" src="${jugador.avatar}" alt="Jugador" style="margin-right:18px;">
+      &lt;img class="battle-vs-avatar entrar-izquierda" src="${jugador.avatar}" alt="Jugador" style="margin-right:18px;">
       &lt;span class="battle-vs-vs">vs&lt;/span>
-      &lt;img class="battle-vs-avatar slide-in-right" src="${enemigo.avatar}" alt="${enemigo.nombre}" style="margin-left:18px;">
+      &lt;img class="battle-vs-avatar entrar-derecha" src="${enemigo.avatar}" alt="${enemigo.nombre}" style="margin-left:18px;">
     &lt;/div>
     &lt;div class="battle-item">
       &lt;div class="result-text ${resultado.ganador === "jugador" ? "winner" : "loser"}">
@@ -339,7 +336,9 @@ function siguienteBatalla() {
   `;
 
   rondaActual++;
-  if (rondaActual &lt; listaLucha.length &amp;&amp; jugador.vida > 0) {
+
+  // Mostrar/ocultar botones según el estado del jugador
+  if (jugador.vida > 0 &amp;&amp; rondaActual &lt; listaLucha.length) {
     document.getElementById('btn-next-battle').classList.remove('hidden');
     document.getElementById('btn-to-results').classList.add('hidden');
   } else {
@@ -355,7 +354,14 @@ function siguienteBatalla() {
  * @returns {void}
  */
 function mostrarResultados() {
-  let ranking = obtenerRanking(jugador.puntos, UMBRAL_VETERANO);
+  let listaLucha = enemigos.concat([jefe]);
+  let ranking = "Novato"; // por defecto el jugador es un novato
+
+  // Cambiar el ranking solo si el jugador derrota al jefe final
+  if (jugador.vida > 0 &amp;&amp; rondaActual === listaLucha.length &amp;&amp; resultadosBatallas[resultadosBatallas.length - 1].ganador === "jugador") {
+    ranking = obtenerRanking(jugador.puntos, UMBRAL_VETERANO);
+  }
+
   let mensaje = mostrarMensajeRanking(ranking);
   document.getElementById('results-container').innerHTML = `
     &lt;h3>${ranking}&lt;/h3>
@@ -368,7 +374,7 @@ function mostrarResultados() {
   // si superamos a los enemigos, lanzamos confetti
   if (typeof confetti === "function" &amp;&amp; jugador.vida > 0) {
     confetti({
-      particleCount: 120,
+      particleCount: 200,
       spread: 70,
       origin: { y: 0.6 }
     });
@@ -376,7 +382,6 @@ function mostrarResultados() {
 
   mostrarEscena('results');
 }
-
 
 
 // botones
@@ -408,7 +413,7 @@ iniciarJuego();
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.5</a> on Sat Nov 29 2025 11:15:20 GMT+0100 (hora estándar de Europa central)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.5</a> on Wed Dec 03 2025 12:29:03 GMT+0100 (hora estándar de Europa central)
 </footer>
 
 <script> prettyPrint(); </script>
