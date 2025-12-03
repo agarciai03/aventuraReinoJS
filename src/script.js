@@ -11,6 +11,8 @@ import { obtenerRanking, mostrarMensajeRanking } from '../modules/ranking.js';
 
 //variables
 let jugador, oro, productosDisponibles, enemigos, jefe, seleccionados = [], descuentos = {};
+let rondaActual = 0;
+let resultadosBatallas = [];
 
 
 /**
@@ -246,13 +248,6 @@ function cargarEnemigos() {
   });
 }
 
-
-
-// flujo de batallas, 1 por escena
-let rondaActual = 0;
-let resultadosBatallas = [];
-
-
 /**
  * Prepara la escena de batallas y lanza la primera.
  * @returns {void}
@@ -272,11 +267,16 @@ function cargarBatallas() {
  */
 function siguienteBatalla() {
   let listaLucha = enemigos.concat([jefe]);
+  let btnNextBattle = document.getElementById('btn-next-battle');
+  let btnToResults = document.getElementById('btn-to-results');
+
   if (rondaActual >= listaLucha.length || jugador.vida <= 0) {
-    document.getElementById('btn-next-battle').classList.add('hidden');
-    document.getElementById('btn-to-results').classList.remove('hidden');
+    // Si el jugador pierde o se acaban las batallas, mostrar solo "Ver resultados"
+    btnNextBattle.style.display = 'none';
+    btnToResults.style.display = 'block';
     return;
   }
+
   let enemigo = listaLucha[rondaActual];
   let resultado = combate(jugador, enemigo);
   resultadosBatallas.push(resultado);
@@ -289,7 +289,7 @@ function siguienteBatalla() {
     jugador.vida = 0;
   }
 
-  // solo aparece una batalla a la vez 
+  // Mostrar la batalla actual
   let battlesDiv = document.getElementById("battles-container");
   battlesDiv.innerHTML = `
     <div class="battle-vs-row">
@@ -311,13 +311,20 @@ function siguienteBatalla() {
 
   // Mostrar/ocultar botones según el estado del jugador
   if (jugador.vida > 0 && rondaActual < listaLucha.length) {
-    document.getElementById('btn-next-battle').classList.remove('hidden');
-    document.getElementById('btn-to-results').classList.add('hidden');
+    // Si el jugador sigue vivo y hay más batallas, mostrar "Siguiente batalla"
+    btnNextBattle.style.display = 'block';
+    btnToResults.style.display = 'none';
   } else {
-    document.getElementById('btn-next-battle').classList.add('hidden');
-    document.getElementById('btn-to-results').classList.remove('hidden');
+    // Si el jugador pierde o se acaban las batallas, mostrar solo "Ver resultados"
+    btnNextBattle.style.display = 'none';
+    btnToResults.style.display = 'block';
   }
 }
+
+//inicio del juego
+document.getElementById('btn-next-battle').onclick = siguienteBatalla;
+document.getElementById('btn-to-results').onclick = mostrarResultados;
+iniciarJuego();
 
 
 /**
