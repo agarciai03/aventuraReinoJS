@@ -1,3 +1,4 @@
+    /* Variables */
 :root {
     --color-brown-dark: #6e4e19;
     --color-brown-light: #cfa962;
@@ -15,7 +16,6 @@
     --radius-medium: 8px;
 }
 
-
 /* No scroll horizontal */
 html,
 body {
@@ -23,6 +23,7 @@ body {
     overflow-x: hidden;
 }
 
+/* Configuración básica del cuerpo*/
 body {
     background: var(--color-brown-light);
     font-family: var(--font-main);
@@ -31,8 +32,8 @@ body {
     margin: 0;
 }
 
-
 /* ----- HEADER ----- */
+/* Estilo del encabezado */
 header {
     font-size: var(--font-size-title);
     padding: 20px 0 10px 0;
@@ -42,11 +43,13 @@ header {
     letter-spacing: 2px;
 }
 
+/* Espaciado interno del contenido principal */
 main {
     padding: 0 var(--spacing-small) 16px var(--spacing-small);
     box-sizing: border-box;
 }
 
+/* Estilo de títulos y subtítulos */
 h2,
 h3 {
     color: var(--color-brown-dark);
@@ -54,15 +57,18 @@ h3 {
     font-size: var(--font-size-subtitle);
 }
 
+/* Oculta las escenas por defecto */
 .scene {
     display: none;
 }
 
+/* Muestra la escena activa con animación suave */
 .scene.active {
     display: block;
     animation: aparecer-suave 0.9s;
 }
 
+/* Estilo de las imágenes del jugador */
 #player-image,
 #player-image-actual {
     width: 150px;
@@ -74,7 +80,7 @@ h3 {
     object-fit: contain;
 }
 
-/* layout de la escena inicial y actual: imagen + tarjetas */
+/* Diseño en grid para la escena inicial */
 .initial-layout {
     display: grid;
     grid-template-columns: auto 1fr;
@@ -82,7 +88,7 @@ h3 {
     align-items: flex-start;
 }
 
-/* cuadricula de tarjetas de stats */
+/* Diseño en grid para las tarjetas de estadísticas */
 .stats-grid {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 180px));
@@ -90,7 +96,7 @@ h3 {
     justify-content: center;
 }
 
-/* tarjeta individual de estadística */
+/* Estilo de las tarjetas de estadísticas */
 .stats-card {
     background: var(--color-brown-light);
     border: 2px solid var(--color-brown-dark);
@@ -100,9 +106,8 @@ h3 {
     box-shadow: 0 2px 8px #0002;
 }
 
-
-
 /* ------- ANIMACIONES GENERALES ------- */
+/* Animación para mostrar elementos suavemente */
 @keyframes aparecer-suave {
     from {
         opacity: 0;
@@ -113,6 +118,7 @@ h3 {
     }
 }
 
+/* Animación para resaltar productos seleccionados */
 @keyframes producto-seleccionado {
     0% {
         transform: scale(0.95);
@@ -127,6 +133,7 @@ h3 {
     }
 }
 
+/* Animación para que los elementos entren desde la izquierda */
 @keyframes entrar-izquierda {
     0% {
         transform: translateX(-130%) scale(1.1);
@@ -139,6 +146,7 @@ h3 {
     }
 }
 
+/* Animación para que los elementos entren desde la derecha */
 @keyframes entrar-derecha {
     0% {
         transform: translateX(130%) scale(1.1);
@@ -151,14 +159,17 @@ h3 {
     }
 }
 
+/* Aplica la animación de entrada desde la izquierda */
 .entrar-izquierda {
     animation: entrar-izquierda 0.7s ease-out;
 }
 
+/* Aplica la animación de entrada desde la derecha */
 .entrar-derecha {
     animation: entrar-derecha 0.7s ease-out;
 }
 
+/* Animación para mostrar resultados con efecto de pop */
 @keyframes resultado-pop {
     0% {
         transform: scale(0.9) translateY(15px);
@@ -176,8 +187,8 @@ h3 {
     }
 }
 
-
 /* ------ MERCADO ------ */
+/* Diseño en grid para los productos del mercado */
 #market-container {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -185,6 +196,7 @@ h3 {
     margin-bottom: 18px;
 }
 
+/* Estilo de las tarjetas de productos */
 .product-item {
     background: var(--color-white);
     border: 3px solid var(--color-brown-dark);
@@ -200,6 +212,7 @@ h3 {
     transition: box-shadow 0.2s, background 0.2s, border 0.2s;
 }
 
+/* Hover y selección de productos */
 .product-item.selected,
 .product-item:hover {
     background: var(--color-yellow);
@@ -207,10 +220,12 @@ h3 {
     box-shadow: 0 8px 20px #311b02a0;
 }
 
+/* Animación para productos seleccionados */
 .product-item.selected {
     animation: producto-seleccionado 0.25s ease-out;
 }
 
+/* Estilo de las imágenes de los productos */
 .product-item img {
     width: 85px;
     max-height: 88px;
@@ -218,16 +233,19 @@ h3 {
     border-radius: var(--radius-small);
 }
 
+/* Estilo del título de los productos */
 .product-item h4 {
     margin: 2px 0;
     font-size: 18px;
 }
 
+/* Estilo del texto descriptivo de los productos */
 .product-item p {
     margin: 1px 0;
     text-align: center;
 }
 
+/* Estilo de los botones de los productos */
 .product-item button {
     background: var(--color-yellow);
     border: 2px solid var(--color-brown-dark);
@@ -241,13 +259,14 @@ h3 {
     transition: background 0.18s;
 }
 
+/* Hover en los botones */
 .product-item button:hover {
     background: var(--color-brown-dark);
     color: var(--color-yellow);
 }
 
-
 /* ------ ENEMIGOS ------ */
+/* Diseño en grid para los enemigos */
 #enemies-container {
     display: grid;
     gap: 24px;
@@ -259,6 +278,7 @@ h3 {
     box-sizing: border-box;
 }
 
+/* Estilo de las tarjetas de enemigos */
 .enemy-item {
     background: var(--color-white);
     border: 3px solid var(--color-brown-dark);
@@ -274,6 +294,7 @@ h3 {
     box-sizing: border-box;
 }
 
+/* Estilo de las imágenes de los enemigos */
 .enemy-item img {
     width: 88px;
     min-height: 80px;
@@ -281,20 +302,22 @@ h3 {
     object-fit: contain;
 }
 
+/* Estilo del título de los enemigos */
 .enemy-item h3 {
     font-size: 18px;
     color: var(--color-brown-dark);
     margin-bottom: 6px;
 }
 
+/* Estilo del texto descriptivo de los enemigos */
 .enemy-item p {
     font-size: var(--font-size-text);
     margin-bottom: 2px;
     color: #26190a;
 }
 
-
 /* ------ BATALLA ------- */
+/* Diseño de la fila de batalla: jugador vs enemigo */
 .battle-vs-row {
     display: flex;
     justify-content: space-around;
@@ -307,6 +330,7 @@ h3 {
     box-sizing: border-box;
 }
 
+/* Estilo de las imágenes de los avatares en batalla */
 .battle-vs-avatar {
     width: 135px;
     height: 135px;
@@ -314,6 +338,7 @@ h3 {
     object-fit: contain;
 }
 
+/* Estilo del texto vs en las batallas */
 .battle-vs-vs {
     font-size: 32px;
     font-family: var(--font-main);
@@ -321,6 +346,7 @@ h3 {
     color: var(--color-brown-dark);
 }
 
+/* Estilo del cuadro de resultados de la batalla */
 .battle-item {
     background: var(--color-brown-dark);
     color: var(--color-yellow);
@@ -335,8 +361,8 @@ h3 {
     box-sizing: border-box;
 }
 
-
 /* ------ RESULTADOS ------- */
+/* Estilo del cuadro de resultados finales */
 #results-container {
     background: var(--color-brown-dark);
     color: var(--color-yellow);
@@ -351,8 +377,8 @@ h3 {
     animation: resultado-pop 0.6s ease-out;
 }
 
-
 /* ------ INVENTARIO ------ */
+/* Diseño del contenedor del inventario */
 #inventory-container {
     background: var(--color-brown-dark);
     border: 4px solid #312211;
@@ -368,6 +394,7 @@ h3 {
     box-sizing: border-box;
 }
 
+/* Estilo de los espacios del inventario */
 #inventory-container .item {
     width: 60px;
     height: 65px;
@@ -380,6 +407,7 @@ h3 {
     justify-content: center;
 }
 
+/* Estilo de las imágenes de los ítems en el inventario */
 #inventory-container .item img {
     max-width: 90%;
     max-height: 90%;
@@ -390,13 +418,14 @@ h3 {
     transition: transform 0.25s;
 }
 
+/* Hover en los ítems */
 #inventory-container .item img:hover {
     transform: scale(1.12) rotate(-8deg);
     filter: brightness(1.2) drop-shadow(0 0 10px #fff4);
 }
 
-
 /* ----- CAJAS INFO ----- */
+/* Estilo de las cajas de información y estadísticas */
 .stats-box,
 .info-box {
     background: var(--color-brown-light);
@@ -410,8 +439,8 @@ h3 {
     box-sizing: border-box;
 }
 
-
 /* ----- BOTONES ----- */
+/* Estilo general de los botones */
 button,
 .btn {
     background: var(--color-yellow);
@@ -428,6 +457,7 @@ button,
     transition: background 0.18s, color 0.13s, transform 0.15s;
 }
 
+/* Hover y focus en los botones */
 button:hover,
 .btn:hover,
 button:focus {
@@ -436,11 +466,8 @@ button:focus {
     transform: scale(1.08);
 }
 
-
 /* ------ RESPONSIVE ------ */
-
-
-/* 1024 px  */
+/* Ajustes para pantallas (1024px) */
 @media (max-width: 1024px) {
     #market-container {
         grid-template-columns: repeat(2, 1fr);
@@ -451,8 +478,7 @@ button:focus {
     }
 }
 
-
-/* 720 px  */
+/* Ajustes para pantallas (720px) */
 @media (max-width: 720px) {
     #market-container {
         grid-template-columns: repeat(2, 1fr);
@@ -463,8 +489,7 @@ button:focus {
     }
 }
 
-
-/* 360 px  */
+/* Ajustes para pantallas (360px) */
 @media (max-width: 360px) {
     #market-container {
         grid-template-columns: 1fr;
@@ -477,7 +502,6 @@ button:focus {
     .stats-grid {
         grid-template-columns: 1fr;
     }
-
 
     #inventory-container {
         max-width: 320px;
@@ -494,11 +518,13 @@ button:focus {
     }
 }
 
+/* Estilo del scrollbar */
 ::-webkit-scrollbar-thumb {
     background: var(--color-brown-dark);
     border-radius: 10px;
 }
 
+/* Fondo del scrollbar */
 ::-webkit-scrollbar {
     width: 8px;
     background: var(--color-brown-light);
