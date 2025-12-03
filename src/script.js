@@ -321,6 +321,12 @@ function siguienteBatalla() {
   }
 }
 
+//inicio del juego
+document.getElementById('btn-next-battle').onclick = siguienteBatalla;
+document.getElementById('btn-to-results').onclick = mostrarResultados;
+iniciarJuego();
+
+
 /**
  * Muestra la pantalla de resultados finales:
  * puntos, vida, items y ranking (Novato/Veterano).

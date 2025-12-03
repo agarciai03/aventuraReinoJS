@@ -31,6 +31,6 @@ export function combate(jugador, enemigo) {
         if (enemigo.multiplicador) puntos = Math.round(puntos * enemigo.multiplicador);
     }
 
-    // Retornar resultado de la batalla
+    // Volvemos al resultado de la batalla
     return { ganador, puntos: ganador === "jugador" ? puntos : 0, registro };
 }
