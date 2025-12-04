@@ -22,18 +22,22 @@
             <div class="initial-layout">
                 <img id="player-image" src="img/personaje.png" alt="Jugador">
 
-                <div class="stats-grid">
+                <form class="stats-grid">
                     <div class="stats-card">
-                        <p><strong>Nombre:</strong> Aventurero</p>
+                        <label for="jugador">Nombre:</label>
+                        <input id="jugador" type="text" placeholder="Aventurero">
                     </div>
                     <div class="stats-card">
-                        <p><strong>Vida:</strong> <span id="stat-vida-inicial">100</span></p>
+                        <label for="stat-vida-inicial">Vida:</label>
+                        <input id="stat-vida-inicial" type="number" min="100">
                     </div>
                     <div class="stats-card">
-                        <p><strong>Ataque:</strong> <span id="stat-ataque-inicial">0</span></p>
+                        <label for="stat-ataque-inicial">Ataque:</label>
+                        <input id="stat-ataque-inicial" type="number" min="0">
                     </div>
                     <div class="stats-card">
-                        <p><strong>Defensa:</strong> <span id="stat-defensa-inicial">0</span></p>
+                        <label for="stat-defensa-inicial">Defensa:</label>
+                        <input id="stat-defensa-inicial" type="number" min="0">
                     </div>
                     <div class="stats-card">
                         <p><strong>Oro:</strong> <span id="stat-oro-inicial">500</span></p>
@@ -41,7 +45,7 @@
                     <div class="stats-card">
                         <p><strong>Items:</strong> <span id="stat-items-inicial">0</span></p>
                     </div>
-                </div>
+                </form>
             </div>
 
             <button id="btn-to-market" class="btn">Ir al mercado</button>

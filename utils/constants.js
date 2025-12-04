@@ -1,7 +1,7 @@
 // Archivo: utils/constants.js
 
 /** Oro inicial del jugador */
-export const ORO_INICIAL = 500;
+export const Dinero = 500;
 /** Vida inicial del jugador */
 export const VIDA_JUGADOR = 100;
 /** Puntos necesarios para ser Veterano */
