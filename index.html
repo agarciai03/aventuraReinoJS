@@ -110,6 +110,11 @@
             <div id="battles-container"></div>
             <button id="btn-next-battle" class="hidden">Siguiente batalla</button>
             <button id="btn-to-results" class="hidden">Ver resultados</button>
+            <div class="moneda" id="caer-moneda">
+                <img class="moneda1" src="img/moneda.png" alt="moneda">
+                <img class="moneda2" src="img/moneda.png" alt="moneda">
+                <img class="moneda3" src="img/moneda.png" alt="moneda">
+            </div>
         </div>
 
         <!-- ESCENA RESULTADOS FINALES -->
@@ -117,6 +122,37 @@
             <h2>Resultados finales</h2>
             <div id="results-container" class="stats-box"></div>
             <button id="btn-restart">Reiniciar aventura</button>
+            <table>
+                <thead>
+                    <th>Jugador</th>
+                    <th>Puntos</th>
+                    <th>Monedas</th>
+                </thead>
+
+                <tr>
+                    <td>Aventurero</td>
+                    <td>23</td>
+                    <td>20</td>
+                </tr>
+
+                <tr>
+                    <td>Globin</td>
+                    <td>12</td>
+                    <td>5</td>
+                </tr>
+
+                <tr>
+                    <td>Orco</td>
+                    <td>10</td>
+                    <td>5</td>
+                </tr>
+
+                <tr>
+                    <td>Final Boss</td>
+                    <td>20</td>
+                    <td>10</td>
+                </tr>
+            </table>
         </div>
     </main>
     <footer>
@@ -131,5 +167,8 @@
             <div class="item"><img src="img/" alt="Vacío"></div>
         </div>
     </footer>
+    <div class="dinero" id="monedero-animacion">
+        <img src="img/monedero.png" alt="saco" draggable="true">
+    </div>
 
 </body>
