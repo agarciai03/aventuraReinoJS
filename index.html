@@ -39,7 +39,7 @@
         <div id="market" class="scene">
             <h2>Mercado del reino</h2>
             <div class="info-box">
-                <p><strong>Oro actual:</strong> <span id="current-gold">0</span> monedas</p>
+                <p><strong>Oro actual:</strong> <span id="current-gold">500</span> monedas</p>
                 <p id="discount-info"></p>
             </div>
             <h3>Productos disponibles:</h3>
@@ -82,6 +82,15 @@
                 </div>
             </div>
 
+            <!-- Añadimos los elementos necesarios para mostrar el estado inicial del jugador -->
+            <div id="stats-inicial" class="stats-box">
+                <p><strong>Vida inicial:</strong> <span id="stat-vida-inicial">100</span></p>
+                <p><strong>Ataque inicial:</strong> <span id="stat-ataque-inicial">0</span></p>
+                <p><strong>Defensa inicial:</strong> <span id="stat-defensa-inicial">0</span></p>
+                <p><strong>Oro inicial:</strong> <span id="stat-oro-inicial">500</span></p>
+                <p><strong>Items iniciales:</strong> <span id="stat-items-inicial">0</span></p>
+            </div>
+
             <button id="btn-to-enemies" class="btn">Continuar</button>
         </section>
 
@@ -110,6 +119,7 @@
             <h2>Resultados finales</h2>
             <div id="results-container" class="stats-box"></div>
             <button id="btn-restart">Reiniciar aventura</button>
+            <button id="btn-show-ranking">Mostrar ranking (consola)</button>
             <table>
                 <thead>
                     <th>Jugador</th>
@@ -160,3 +170,5 @@
     </div>
 
 </body>
+
+</html>
