@@ -60,3 +60,6 @@ export const jefeFinal = {
     multiplicador: 1.2,
     avatar: 'img/finalboss.png'
 };
+
+export const MONEDAS_ENEMIGO = 5;
+export const MONEDAS_JEFE = 10;
