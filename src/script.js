@@ -1,5 +1,5 @@
 //imports
-import { ORO_INICIAL, VIDA_JUGADOR, productosMercado, enemigosLista, jefeFinal, UMBRAL_VETERANO } from '../utils/constants.js';
+import { Dinero, VIDA_JUGADOR, productosMercado, enemigosLista, jefeFinal, UMBRAL_VETERANO } from '../utils/constants.js';
 import { formatearPrecio } from '../utils/utils.js';
 import { Jugador } from '../modules/jugador.js';
 import { Enemigo, Jefe } from '../modules/enemigos.js';
@@ -22,7 +22,7 @@ let resultadosBatallas = [];
  */
 function iniciarJuego() {
   jugador = new Jugador("Aventurero", "img/personaje.png", VIDA_JUGADOR);
-  oro = ORO_INICIAL;
+  oro = Dinero;
   productosDisponibles = obtenerProductosMercado();
   enemigos = enemigosLista.map(event => new Enemigo(event.nombre, event.avatar, event.ataque, event.vida));
   jefe = new Jefe(jefeFinal.nombre, jefeFinal.avatar, jefeFinal.ataque, jefeFinal.vida, jefeFinal.multiplicador);
@@ -277,6 +277,7 @@ function siguienteBatalla() {
     return;
   }
 
+
   let enemigo = listaLucha[rondaActual];
   let resultado = combate(jugador, enemigo);
   resultadosBatallas.push(resultado);
@@ -307,6 +308,8 @@ function siguienteBatalla() {
     </div>
   `;
 
+  // Guardar datos
+  localStorage.setItem("Aventurero", "Puntos", "Monedas");
   rondaActual++;
 
   // Mostrar/ocultar botones según el estado del jugador
@@ -320,12 +323,6 @@ function siguienteBatalla() {
     btnToResults.style.display = 'block';
   }
 }
-
-//inicio del juego
-document.getElementById('btn-next-battle').onclick = siguienteBatalla;
-document.getElementById('btn-to-results').onclick = mostrarResultados;
-iniciarJuego();
-
 
 /**
  * Muestra la pantalla de resultados finales:
@@ -347,9 +344,9 @@ function mostrarResultados() {
     <p><strong>Puntos totales:</strong> ${jugador.puntos}</p>
     <p><strong>Vida final:</strong> ${jugador.vida}</p>
     <p><strong>Items comprados:</strong> ${jugador.inventario.length}</p>
+    <p><strong>Monedas restantes:</strong> ${jugador.oro}</p>
     <p>${mensaje}</p>
   `;
-
   // si superamos a los enemigos, lanzamos confetti
   if (typeof confetti === "function" && jugador.vida > 0) {
     confetti({
