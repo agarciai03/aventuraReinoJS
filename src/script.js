@@ -1,3 +1,8 @@
+/**
+ * @file Archivo principal que controla la lógica del juego "Aventura en el Reino de JS".
+ * Maneja el flujo de escenas, la creación del jugador, el mercado, las batallas y los resultados.
+ */
+
 // IMPORTS
 import { productosMercado, enemigosLista, jefeFinal, UMBRAL_VETERANO } from '../utils/constants.js';
 import { formatearPrecio } from '../utils/utils.js';
@@ -8,18 +13,19 @@ import { obtenerProductosMercado } from '../modules/mercado.js';
 import { combate } from '../modules/batallas.js';
 import { obtenerRanking, mostrarMensajeRanking } from '../modules/ranking.js';
 
-// VARIABLES GLOBALES
-let jugador;
-let productosDisponibles;
-let enemigos;
-let jefe;
-let seleccionados = [];
-let descuentos = {};
-let rondaActual = 0;
-let resultadosBatallas = [];
+// VARIABLES 
+/** @type {Jugador} Instancia del jugador actual */       let jugador;
+/** @type {Producto[]} Lista de productos del mercado */  let productosDisponibles;
+/** @type {Enemigo[]} Lista de enemigos a combatir */     let enemigos;
+/** @type {Jefe} Jefe final del juego */                  let jefe;
+/** @type {Object[]} Carrito de compra */                 let seleccionados = [];
+/** @type {Object} Descuentos por rareza */               let descuentos = {};
+/** @type {number} Ronda actual */                        let rondaActual = 0;
+/** @type {Object[]} Historial de batallas */             let resultadosBatallas = [];
 
 /**
- * Solo mostramos la pantalla
+ * Inicia la aplicacion mostrando la escena inicial y asignando eventos.
+ * No recibe parámetros ni devuelve valor.
  */
 function iniciarAplicacion() {
   mostrarEscena("initial");
@@ -27,7 +33,9 @@ function iniciarAplicacion() {
 }
 
 /**
- * LOGICA DEL FORMULARIO Y VALIDACIÓN (REQUISITO 1)
+ * Valida los datos del formulario de creación de personaje.
+ * Si los datos son correctos, crea la instancia del Jugador e inicia el juego cargando el mercado.
+ * Si hay errores, muestra alertas al usuario.
  */
 function validarYCrearJugador() {
   const nombre = document.getElementById('inp-nombre').value;
@@ -35,7 +43,7 @@ function validarYCrearJugador() {
   const ataque = parseInt(document.getElementById('inp-ataque').value);
   const defensa = parseInt(document.getElementById('inp-defensa').value);
 
-  // REGEX
+  // REGEX - mayuscula al inicio, solo letras, max 20 caracteres
   const regexNombre = /^[A-Z][a-zA-Z\s]{0,19}$/;
 
   if (!regexNombre.test(nombre) || nombre.trim().length === 0) {
@@ -59,8 +67,10 @@ function validarYCrearJugador() {
     return;
   }
 
+  // Creación del jugador si todo es válido
   jugador = new Jugador(nombre, "img/personaje.png", vida, ataque, defensa);
 
+  // Inicialización de datos del juego
   productosDisponibles = obtenerProductosMercado();
   enemigos = enemigosLista.map(e => new Enemigo(e.nombre, e.avatar, e.ataque, e.vida));
   jefe = new Jefe(jefeFinal.nombre, jefeFinal.avatar, jefeFinal.ataque, jefeFinal.vida, jefeFinal.multiplicador);
@@ -72,13 +82,19 @@ function validarYCrearJugador() {
   cargarMercado();
 }
 
+/**
+ * Cambia la visibilidad de las escenas del juego.
+ * Oculta todas las escenas y muestra solo la que coincide con el ID.
+ * @param {string} id - El ID del elemento HTML de la escena a mostrar.
+ */
 function mostrarEscena(id) {
   document.querySelectorAll('.scene').forEach(e => e.classList.remove('active'));
   document.getElementById(id).classList.add('active');
 }
 
 /**
- * Mostrar dinero disponible en tiempo real
+ * Genera descuentos aleatorios y renderiza la lista de productos en el mercado.
+ * También actualiza la información visual de los descuentos y precios.
  */
 function cargarMercado() {
   descuentos.común = Math.floor(Math.random() * 11);
@@ -100,7 +116,7 @@ function cargarMercado() {
     let div = document.createElement("div");
     div.className = "product-item";
 
-    //formatear precio con descuento
+    // Formatear precio con descuento y mostrar en tarjeta
     div.innerHTML = `
             <img src="${prod.imagen}" alt="${prod.nombre}">
             <h4>${prod.nombre}</h4>
@@ -112,6 +128,7 @@ function cargarMercado() {
     contenedor.appendChild(div);
   });
 
+  // eventos botones añadir
   contenedor.querySelectorAll(".product-btn").forEach(btn => {
     btn.onclick = () => {
       const indice = Number(btn.dataset.indice);
@@ -122,6 +139,10 @@ function cargarMercado() {
   actualizarSeleccion();
 }
 
+/**
+ * Calcula y actualiza en la interfaz el dinero disponible del jugador.
+ * Resta el coste de los productos seleccionados en la cesta al dinero total del jugador.
+ */
 function actualizarInfoDineroMercado() {
   let costeCesta = seleccionados.reduce((acc, sel) => acc + sel.producto.precio, 0);
   let dineroDisponible = jugador.dinero - costeCesta;
@@ -129,16 +150,24 @@ function actualizarInfoDineroMercado() {
   document.getElementById('current-gold').textContent = dineroDisponible;
 }
 
+/**
+ * Gestiona la selección o deselección de un producto en el mercado.
+ * Verifica si hay dinero suficiente antes de añadir.
+ * @param {number} indice - Índice del producto en la lista mostrada.
+ * @param {Producto} prod - Objeto producto seleccionado.
+ * @param {HTMLElement} div - Elemento HTML de la tarjeta del producto.
+ * @param {HTMLButtonElement} boton - Botón pulsado añadir/retirar.
+ */
 function seleccionarProductoMercado(indice, prod, div, boton) {
   let existe = seleccionados.find(sel => sel.indice === indice);
 
   if (existe) {
-    // RETIRAR producto
+    //retiro producto de la cesta
     seleccionados = seleccionados.filter(sel => sel.indice !== indice);
     div.classList.remove('selected');
     boton.textContent = "Añadir";
   } else {
-    // AÑADIR producto 
+    //añado producto a la cesta
     let costeActual = seleccionados.reduce((acc, sel) => acc + sel.producto.precio, 0);
 
     if (costeActual + prod.precio > jugador.dinero) {
@@ -154,6 +183,10 @@ function seleccionarProductoMercado(indice, prod, div, boton) {
   actualizarInfoDineroMercado();
 }
 
+/**
+ * Actualiza la lista visual de productos seleccionados en la cesta de compra
+ * y muestra el coste total acumulado.
+ */
 function actualizarSeleccion() {
   let html = "";
   let total = 0;
@@ -169,6 +202,11 @@ function actualizarSeleccion() {
   document.getElementById('total-price').textContent = formatearPrecio(total);
 }
 
+/**
+ * Finaliza la compra en el mercado.
+ * Verifica fondos, añade items al inventario del jugador, descuenta el oro
+ * y avanza a la siguiente escena.
+ */
 function comprar() {
   if (seleccionados.length === 0) {
     alert("No has seleccionado nada");
@@ -191,7 +229,8 @@ function comprar() {
 }
 
 /**
- * mostrar estado actual del jugador
+ * Muestra en la interfaz los datos actuales del jugador (stats, oro, items).
+ * Actualiza los elementos del DOM correspondientes.
  */
 function mostrarEstadoActual() {
   document.getElementById("stat-nombre-actual").textContent = jugador.nombre;
@@ -208,6 +247,10 @@ function mostrarEstadoActual() {
   }
 }
 
+/**
+ * Renderiza el inventario del jugador en el footer.
+ * Muestra iconos de los objetos obtenidos.
+ */
 function actualizarInventario() {
   let contenedor = document.getElementById('inventory-container');
   if (jugador.inventario.length === 0) {
@@ -228,6 +271,9 @@ function actualizarInventario() {
   }
 }
 
+/**
+ * Genera y muestra las tarjetas de los enemigos en la escena de pre-combate.
+ */
 function cargarEnemigos() {
   let container = document.getElementById('enemies-container');
   container.innerHTML = "";
@@ -244,6 +290,9 @@ function cargarEnemigos() {
   });
 }
 
+/**
+ * Prepara la escena de batallas reiniciando el contenedor visual e iniciando la primera pelea.
+ */
 function cargarBatallas() {
   mostrarEscena('battles');
   document.getElementById('battles-container').innerHTML = "";
@@ -251,7 +300,9 @@ function cargarBatallas() {
 }
 
 /**
- * ganar dinero extra
+ * Ejecuta la lógica de una ronda de batalla entre el jugador y el enemigo actual.
+ * Calcula resultados, otorga recompensas (puntos y oro extra) y actualiza la interfaz.
+ * Controla si el jugador gana, pierde o si se terminan los enemigos.
  */
 function siguienteBatalla() {
   let listaLucha = enemigos.concat([jefe]);
@@ -265,7 +316,7 @@ function siguienteBatalla() {
   }
 
   let enemigo = listaLucha[rondaActual];
-  // comprobar si es el jefe
+  // Comprobar si es el jefe 
   let esJefe = (enemigo === jefe);
 
   let resultado = combate(jugador, enemigo);
@@ -277,7 +328,7 @@ function siguienteBatalla() {
     jugador.sumarPuntos(resultado.puntos);
     jugador.vida = jugador.obtenerVidaTotal();
 
-    // PREMIO EN ORO
+    //oro extra por victoria
     let premio = esJefe ? 10 : 5;
     jugador.dinero += premio;
     mensajeDinero = `<span style="color:yellow; font-weight:bold;">(+${premio} oro)</span>`;
@@ -286,6 +337,7 @@ function siguienteBatalla() {
     jugador.vida = 0;
   }
 
+  // resultado de la batalla
   let battlesDiv = document.getElementById("battles-container");
   battlesDiv.innerHTML = `
     <div class="battle-vs-row">
@@ -305,6 +357,7 @@ function siguienteBatalla() {
 
   rondaActual++;
 
+  //botones Siguiente o Ver resultados
   if (jugador.vida > 0 && rondaActual < listaLucha.length) {
     btnNextBattle.style.display = 'block';
     btnToResults.style.display = 'none';
@@ -315,27 +368,26 @@ function siguienteBatalla() {
 }
 
 /**
- * LocalStorage y Puntos totales + Monedas
+ * Calcula el ranking final, guarda el resultado en LocalStorage y muestra la pantalla final.
+ * Suma el oro restante a la puntuación total.
  */
 function mostrarResultados() {
   let listaLucha = enemigos.concat([jefe]);
   let ranking = "Novato";
 
-  // Sumar el oro restante a la puntuación final
+  // Sumar el oro restante a la puntuación final 
   jugador.puntos += jugador.dinero;
 
   if (jugador.vida > 0 && rondaActual === listaLucha.length && resultadosBatallas[resultadosBatallas.length - 1].ganador === "jugador") {
     ranking = obtenerRanking(jugador.puntos, UMBRAL_VETERANO);
   }
 
-  // GUARDAR EN LOCALSTORAGE
-  // Creamos un objeto con los datos
+  //guardo en localStorage
   const registroRanking = {
     nombre: jugador.nombre,
     puntuacion: jugador.puntos,
     monedasTotales: jugador.dinero
   };
-  // Lo guardamos convertido a texto
   localStorage.setItem('rankingAventura', JSON.stringify(registroRanking));
 
   let mensaje = mostrarMensajeRanking(ranking);
@@ -347,6 +399,7 @@ function mostrarResultados() {
     <p>${mensaje}</p>
   `;
 
+  //Confetti
   if (typeof confetti === "function" && jugador.vida > 0) {
     confetti({ particleCount: 200, spread: 70, origin: { y: 0.6 } });
   }
@@ -354,7 +407,9 @@ function mostrarResultados() {
   mostrarEscena('results');
 }
 
-// Botón para ver el ranking por consola
+// EVENT 
+
+// Boton para ver el ranking por consola 
 document.getElementById('btn-show-ranking').onclick = () => {
   const data = localStorage.getItem('rankingAventura');
   if (data) {
@@ -366,8 +421,7 @@ document.getElementById('btn-show-ranking').onclick = () => {
   }
 };
 
-
-// LISTENERS 
+// asigno eventos a botones 
 document.getElementById('btn-buy').onclick = comprar;
 document.getElementById('btn-skip-market').onclick = () => { mostrarEscena('player'); mostrarEstadoActual(); };
 document.getElementById('btn-to-enemies').onclick = () => { mostrarEscena('enemies'); cargarEnemigos(); };
@@ -376,5 +430,5 @@ document.getElementById('btn-next-battle').onclick = siguienteBatalla;
 document.getElementById('btn-to-results').onclick = mostrarResultados;
 document.getElementById('btn-restart').onclick = () => location.reload();
 
-// INICIO
+// iniciar apliacacion
 iniciarAplicacion();
