@@ -1,617 +1,643 @@
-    /* Variables */
-    :root {
-        --color-brown-dark: #6e4e19;
-        --color-brown-light: #cfa962;
-        --color-yellow: #f9f261;
-        --color-white: #ffffff;
-        --color-black: #191919;
-        --table-border: #000000;
-        --table-bg: #ffa600;
-        --table-header-bg: #cfa962;
-        --table-padding: 0.75rem;
-        --font-main: 'Comic Sans MS', 'Comic Sans', cursive, 'Roboto', Arial, sans-serif;
-        --font-size-title: 29px;
-        --font-size-subtitle: 22px;
-        --font-size-text: 16px;
-        --spacing-small: 8px;
-        --spacing-medium: 14px;
-        --spacing-large: 22px;
-        --radius-small: 6px;
-        --radius-medium: 8px;
+/* Variables */
+:root {
+    --color-brown-dark: #6e4e19;
+    --color-brown-light: #cfa962;
+    --color-yellow: #f9f261;
+    --color-white: #ffffff;
+    --color-black: #191919;
+    --font-main: 'Comic Sans MS', 'Comic Sans', cursive, 'Roboto', Arial, sans-serif;
+    --font-size-title: 29px;
+    --font-size-subtitle: 22px;
+    --font-size-text: 16px;
+    --spacing-small: 8px;
+    --spacing-medium: 14px;
+    --spacing-large: 22px;
+    --radius-small: 6px;
+    --radius-medium: 8px;
+}
+
+/* No scroll horizontal */
+html,
+body {
+    max-width: 100%;
+    overflow-x: hidden;
+}
+
+/* Configuración básica del cuerpo*/
+body {
+    background: var(--color-brown-light);
+    font-family: var(--font-main);
+    color: var(--color-black);
+    min-height: 100vh;
+    margin: 0;
+}
+
+/* ----- HEADER ----- */
+/* Estilo del encabezado */
+header {
+    font-size: var(--font-size-title);
+    padding: 20px 0 10px 0;
+    background: var(--color-brown-dark);
+    color: var(--color-yellow);
+    text-align: center;
+    letter-spacing: 2px;
+}
+
+/* Espaciado interno del contenido principal */
+main {
+    padding: 0 var(--spacing-small) 16px var(--spacing-small);
+    box-sizing: border-box;
+}
+
+/* Estilo de títulos y subtítulos */
+h2,
+h3 {
+    color: var(--color-brown-dark);
+    margin: 8px 0 var(--spacing-medium) 0;
+    font-size: var(--font-size-subtitle);
+}
+
+/* Oculta las escenas por defecto */
+.scene {
+    display: none;
+}
+
+/* Muestra la escena activa con animación suave */
+.scene.active {
+    display: block;
+    animation: aparecer-suave 0.9s;
+}
+
+/* Estilo de las imágenes del jugador */
+#player-image,
+#player-image-actual {
+    width: 150px;
+    height: 150px;
+    max-width: 50vw;
+    max-height: 20vh;
+    margin: 24px 0 8px 24px;
+    border-radius: 12px;
+    object-fit: contain;
+}
+
+/* Diseño en grid para la escena inicial */
+.initial-layout {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 18px;
+    align-items: flex-start;
+}
+
+/* Diseño en grid para las tarjetas de estadísticas */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 180px));
+    gap: 12px;
+    justify-content: center;
+}
+
+/* Estilo de las tarjetas de estadísticas */
+.stats-card {
+    background: var(--color-brown-light);
+    border: 2px solid var(--color-brown-dark);
+    border-radius: 8px;
+    padding: 12px 10px;
+    text-align: center;
+    box-shadow: 0 2px 8px #0002;
+}
+
+/* ------- ANIMACIONES GENERALES ------- */
+/* Animación para mostrar elementos suavemente */
+@keyframes aparecer-suave {
+    from {
+        opacity: 0;
     }
 
-    /* No scroll horizontal */
-    html,
-    body {
-        max-width: 100%;
-        overflow-x: hidden;
-        max-height: 100%;
+    to {
+        opacity: 1;
+    }
+}
+
+/* Animación para resaltar productos seleccionados */
+@keyframes producto-seleccionado {
+    0% {
+        transform: scale(0.95);
     }
 
-    /* Configuración básica del cuerpo*/
-    body {
-        background: var(--color-brown-light);
-        font-family: var(--font-main);
-        color: var(--color-black);
-        min-height: 100vh;
-        margin: 0;
+    60% {
+        transform: scale(1.06);
     }
 
-    /* ----- HEADER ----- */
-    /* Estilo del encabezado */
-    header {
-        font-size: var(--font-size-title);
-        padding: 20px 0 10px 0;
-        background: var(--color-brown-dark);
-        color: var(--color-yellow);
-        text-align: center;
-        letter-spacing: 2px;
+    100% {
+        transform: scale(1);
+    }
+}
+
+/* Animación para que los elementos entren desde la izquierda */
+@keyframes entrar-izquierda {
+    0% {
+        transform: translateX(-130%) scale(1.1);
+        opacity: 0;
     }
 
-    /* Espaciado interno del contenido principal */
-    main {
-        padding: 0 var(--spacing-small) 16px var(--spacing-small);
-        box-sizing: border-box;
+    100% {
+        transform: translateX(0) scale(1);
+        opacity: 1;
+    }
+}
+
+/* Animación para que los elementos entren desde la derecha */
+@keyframes entrar-derecha {
+    0% {
+        transform: translateX(130%) scale(1.1);
+        opacity: 0;
     }
 
-    /* Estilo de títulos y subtítulos */
-    h2,
-    h3 {
-        color: var(--color-brown-dark);
-        margin: 8px 0 var(--spacing-medium) 0;
-        font-size: var(--font-size-subtitle);
+    100% {
+        transform: translateX(0) scale(1);
+        opacity: 1;
+    }
+}
+
+/* Aplica la animación de entrada desde la izquierda */
+.entrar-izquierda {
+    animation: entrar-izquierda 0.7s ease-out;
+}
+
+/* Aplica la animación de entrada desde la derecha */
+.entrar-derecha {
+    animation: entrar-derecha 0.7s ease-out;
+}
+
+/* Animación para mostrar resultados con efecto de pop */
+@keyframes resultado-pop {
+    0% {
+        transform: scale(0.9) translateY(15px);
+        opacity: 0;
     }
 
-    /* Oculta las escenas por defecto */
-    .scene {
-        display: none;
+    60% {
+        transform: scale(1.03) translateY(0);
+        opacity: 1;
     }
 
-    /* Muestra la escena activa con animación suave */
-    .scene.active {
-        display: block;
-        animation: aparecer-suave 0.9s;
+    100% {
+        transform: scale(1) translateY(0);
+        opacity: 1;
+    }
+}
+
+/* ------ MERCADO ------ */
+/* Diseño en grid para los productos del mercado */
+#market-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--spacing-large);
+    margin-bottom: 18px;
+}
+
+/* Estilo de las tarjetas de productos */
+.product-item {
+    background: var(--color-white);
+    border: 3px solid var(--color-brown-dark);
+    border-radius: var(--radius-medium);
+    box-shadow: 0 4px 0 var(--color-brown-light);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    padding: 17px 10px 12px 10px;
+    min-height: 245px;
+    box-sizing: border-box;
+    transition: box-shadow 0.2s, background 0.2s, border 0.2s;
+}
+
+/* Hover y selección de productos */
+.product-item.selected,
+.product-item:hover {
+    background: var(--color-yellow);
+    border-width: 4px;
+    box-shadow: 0 8px 20px #311b02a0;
+}
+
+/* Animación para productos seleccionados */
+.product-item.selected {
+    animation: producto-seleccionado 0.25s ease-out;
+}
+
+/* Estilo de las imágenes de los productos */
+.product-item img {
+    width: 85px;
+    max-height: 88px;
+    margin: 6px 0 10px 0;
+    border-radius: var(--radius-small);
+}
+
+/* Estilo del título de los productos */
+.product-item h4 {
+    margin: 2px 0;
+    font-size: 18px;
+}
+
+/* Estilo del texto descriptivo de los productos */
+.product-item p {
+    margin: 1px 0;
+    text-align: center;
+}
+
+/* Estilo de los botones de los productos */
+.product-item button {
+    background: var(--color-yellow);
+    border: 2px solid var(--color-brown-dark);
+    border-radius: var(--radius-small);
+    color: var(--color-black);
+    font-weight: bold;
+    font-size: 15px;
+    margin-top: 7px;
+    padding: 6px 16px;
+    cursor: pointer;
+    transition: background 0.18s;
+}
+
+/* Hover en los botones */
+.product-item button:hover {
+    background: var(--color-brown-dark);
+    color: var(--color-yellow);
+}
+
+/* ------ ENEMIGOS ------ */
+/* Diseño en grid para los enemigos */
+#enemies-container {
+    display: grid;
+    gap: 24px;
+    grid-template-columns: repeat(2, 1fr);
+    background: var(--color-brown-dark);
+    padding: 22px 18px;
+    border-radius: 14px;
+    margin-bottom: 16px;
+    box-sizing: border-box;
+}
+
+/* Estilo de las tarjetas de enemigos */
+.enemy-item {
+    background: var(--color-white);
+    border: 3px solid var(--color-brown-dark);
+    border-radius: var(--radius-medium);
+    text-align: center;
+    padding: 13px;
+    min-height: 194px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 9px #311b0260;
+    box-sizing: border-box;
+}
+
+/* Estilo de las imágenes de los enemigos */
+.enemy-item img {
+    width: 88px;
+    min-height: 80px;
+    margin-bottom: 5px;
+    object-fit: contain;
+}
+
+/* Estilo del título de los enemigos */
+.enemy-item h3 {
+    font-size: 18px;
+    color: var(--color-brown-dark);
+    margin-bottom: 6px;
+}
+
+/* Estilo del texto descriptivo de los enemigos */
+.enemy-item p {
+    font-size: var(--font-size-text);
+    margin-bottom: 2px;
+    color: #26190a;
+}
+
+/* ------ BATALLA ------- */
+/* Diseño de la fila de batalla: jugador vs enemigo */
+.battle-vs-row {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    background: var(--color-brown-light);
+    border-radius: 10px;
+    border: 4px solid var(--color-brown-dark);
+    margin-top: 18px;
+    padding: 16px 8px;
+    box-sizing: border-box;
+}
+
+/* Estilo de las imágenes de los avatares en batalla */
+.battle-vs-avatar {
+    width: 135px;
+    height: 135px;
+    border-radius: 13px;
+    object-fit: contain;
+}
+
+/* Estilo del texto vs en las batallas */
+.battle-vs-vs {
+    font-size: 32px;
+    font-family: var(--font-main);
+    font-weight: bold;
+    color: var(--color-brown-dark);
+}
+
+/* Estilo del cuadro de resultados de la batalla */
+.battle-item {
+    background: var(--color-brown-dark);
+    color: var(--color-yellow);
+    border-radius: 12px;
+    font-size: 22px;
+    margin: 22px auto 10px auto;
+    width: 95%;
+    text-align: center;
+    border: none;
+    box-shadow: 0 2px 22px #0002;
+    padding: 26px 0;
+    box-sizing: border-box;
+}
+
+/* ------ RESULTADOS ------- */
+/* Estilo del cuadro de resultados finales */
+#results-container {
+    background: var(--color-brown-dark);
+    color: var(--color-yellow);
+    border-radius: 12px;
+    margin: 36px auto 8px auto;
+    width: 95%;
+    text-align: center;
+    font-size: 24px;
+    box-shadow: 0 6px 32px #1b090230;
+    padding: 52px 10px 44px 10px;
+    box-sizing: border-box;
+    animation: resultado-pop 0.6s ease-out;
+}
+
+/* ------ INVENTARIO ------ */
+/* Diseño del contenedor del inventario */
+#inventory-container {
+    background: var(--color-brown-dark);
+    border: 4px solid #312211;
+    border-radius: 6px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    min-height: 65px;
+    margin: 18px auto 10px auto;
+    max-width: 540px;
+    padding: 12px 8px;
+    box-sizing: border-box;
+}
+
+/* Estilo de los espacios del inventario */
+#inventory-container .item {
+    width: 60px;
+    height: 65px;
+    background: var(--color-brown-light);
+    border-radius: var(--radius-small);
+    border: 2.5px solid #a08453;
+    box-shadow: 0 2px 13px #e6ca9a7a inset;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Estilo de las imágenes de los ítems en el inventario */
+#inventory-container .item img {
+    max-width: 90%;
+    max-height: 90%;
+    object-fit: contain;
+    display: block;
+    border: none;
+    background: transparent;
+    transition: transform 0.25s;
+}
+
+/* Hover en los ítems */
+#inventory-container .item img:hover {
+    transform: scale(1.12) rotate(-8deg);
+    filter: brightness(1.2) drop-shadow(0 0 10px #fff4);
+}
+
+/* ----- CAJAS INFO ----- */
+/* Estilo de las cajas de información y estadísticas */
+.stats-box,
+.info-box {
+    background: var(--color-brown-light);
+    border-radius: var(--radius-small);
+    margin: 14px 0;
+    border: 2.5px solid var(--color-brown-dark);
+    color: var(--color-brown-dark);
+    box-shadow: 0 1px 10px #9c843320;
+    padding: 15px 8px;
+    text-align: center;
+    box-sizing: border-box;
+}
+
+/* ----- BOTONES ----- */
+/* Estilo general de los botones */
+button,
+.btn {
+    background: var(--color-yellow);
+    color: var(--color-brown-dark);
+    border: 2px solid var(--color-brown-dark);
+    border-radius: 7px;
+    font-family: var(--font-main);
+    font-size: 17px;
+    box-shadow: 0 2px 1px #efd66260;
+    margin-top: 8px;
+    min-width: 100px;
+    padding: 7px 10px;
+    box-sizing: border-box;
+    transition: background 0.18s, color 0.13s, transform 0.15s;
+}
+
+/* Hover y focus en los botones */
+button:hover,
+.btn:hover,
+button:focus {
+    background: var(--color-brown-dark);
+    color: var(--color-yellow);
+    transform: scale(1.08);
+}
+
+/* ESTILOS DEL MONEDERO */
+#monedero-defensa {
+    left: 2%;
+    bottom: 1%;
+    width: 130px;
+    animation: entradaMonedero 2s ease-out forwards;
+}
+
+#monedero-defensa img {
+    width: 100%;
+    display: block;
+}
+
+#monedero-defensa .texto-dinero {
+    position: absolute;
+    top: 55%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-family: var(--font-main);
+    font-size: 22px;
+    font-weight: bold;
+    color: #3e2708;
+}
+
+/* Animación: Arrastrar desde la parte izquierda oculta */
+@keyframes entradaMonedero {
+    from {
+        transform: translateX(-200%);
+        opacity: 0;
     }
 
-    /* Estilo de las imágenes del jugador */
-    #player-image,
-    #player-image-actual {
-        width: 150px;
-        height: 150px;
-        max-width: 50vw;
-        max-height: 20vh;
-        margin: 24px 0 8px 24px;
-        border-radius: 12px;
-        object-fit: contain;
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+/* ESTILOS DE LA TABLA RANKING */
+.tabla-ranking {
+    margin: 20px auto;
+    width: 90%;
+    border-collapse: collapse;
+    background-color: var(--color-brown-light);
+    border: 3px solid var(--color-brown-dark);
+}
+
+.tabla-ranking th {
+    background-color: var(--color-brown-dark);
+    color: var(--color-yellow);
+    padding: 10px;
+    font-size: 1.1em;
+}
+
+.tabla-ranking td {
+    border-bottom: 1px solid var(--color-brown-dark);
+    padding: 8px;
+    color: var(--color-black);
+    font-weight: bold;
+}
+
+/* ANIMACIÓN DE LAS MONEDAS */
+#contenedor-monedas {
+    pointer-events: none;
+}
+
+.moneda {
+    position: fixed;
+    top: -100px;
+    width: 50px;
+    z-index: 1000;
+    opacity: 0;
+    animation: caerYRotar 4s ease-in-out infinite;
+}
+
+.moneda.m1 {
+    left: 25%;
+    animation-delay: 0s;
+}
+
+.moneda.m2 {
+    left: 50%;
+    animation-delay: 1.5s;
+}
+
+.moneda.m3 {
+    left: 75%;
+    animation-delay: 3s;
+}
+
+/* La animación cumple: bajar, rotar y difuminar al final */
+@keyframes caerYRotar {
+    0% {
+        top: -60px;
+        /* Borde superior */
+        opacity: 1;
+        transform: rotateY(0deg);
     }
 
-    /* Diseño en grid para la escena inicial */
-    .initial-layout {
-        display: grid;
-        grid-template-columns: auto 1fr;
-        gap: 18px;
-        align-items: flex-start;
+    80% {
+        opacity: 1;
     }
 
-    /* Diseño en grid para las tarjetas de estadísticas */
-    .stats-grid {
-        display: grid;
-        grid-template-columns: repeat(2, minmax(0, 180px));
-        gap: 12px;
-        justify-content: center;
+    100% {
+        top: 50%;
+        /* Hasta la mitad de la pantalla [cite: 115] */
+        opacity: 0;
+        /* Se difuminan [cite: 116] */
+        transform: rotateY(720deg);
+        /* Rotando continuamente [cite: 116] */
     }
+}
 
-    /* Estilo de las tarjetas de estadísticas */
-    .stats-card {
-        background: var(--color-brown-light);
-        border: 2px solid var(--color-brown-dark);
-        border-radius: 8px;
-        padding: 12px 10px;
-        text-align: center;
-        box-shadow: 0 2px 8px #0002;
-    }
-
-    table {
-        width: 100%;
-        border-collapse: collapse;
-        margin: 1.5rem 0;
-        font-size: 0.95rem;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-    }
-
-    th {
-        border: 1px solid var(--table-border);
-        margin: 1.5rem 0;
-        text-align: left;
-        background-color: yellow;
-        color: var(--table-border);
-        border-collapse: collapse;
-        margin: 1.5rem 0;
-        padding: var(--table-padding);
-        font-size: 0.95rem;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-    }
-
-    td {
-        border: 1px solid var(--table-border);
-        padding: var(--table-padding);
-        text-align: left;
-    }
-
-    tr {
-        background: var(--table-header-bg);
-        font-weight: 600;
-    }
-
-    .dinero img {
-        width: 130px;
-        height: 130px;
-        margin-top: 9.7rem;
-        margin-left: 2%;
-        margin-bottom: 1;
-        display: flex;
-    }
-
-    #monedero-animacion {
-        animation: entrar-izquierda 0.8s ease-out;
-    }
-
-
-    .moneda img {
-        width: 70px;
-        height: 70px;
-        align-items: center;
-        justify-content: center;
-        animation: caer-moneda 3s ease-in-out infinite alternate;
-
-    }
-
-    .moneda1 img {
-        margin-right: 20%;
-    }
-
-    .moneda2 img {
-        margin-top: 50%;
-    }
-
-    .moneda3 img {
-        margin-left: 75%;
-
-    }
-
-    /* ------- ANIMACIONES GENERALES ------- */
-    /* Animación para mostrar elementos suavemente */
-
-    @keyframes caer-moneda {
-        from {
-            transform: translateX(0px);
-            opacity: 0;
-        }
-
-        to {
-            transform: translateY(200px);
-            opacity: 1;
-        }
-    }
-
-    @keyframes aparecer-suave {
-        from {
-            opacity: 0;
-        }
-
-        to {
-            opacity: 1;
-        }
-    }
-
-    /* Animación para resaltar productos seleccionados */
-    @keyframes producto-seleccionado {
-        0% {
-            transform: scale(0.95);
-        }
-
-        60% {
-            transform: scale(1.06);
-        }
-
-        100% {
-            transform: scale(1);
-        }
-    }
-
-    /* Animación para que los elementos entren desde la izquierda */
-    @keyframes entrar-izquierda {
-        0% {
-            transform: translateX(-130%) scale(1.1);
-            opacity: 0;
-        }
-
-        100% {
-            transform: translateX(0) scale(1);
-            opacity: 1;
-        }
-    }
-
-    /* Animación para que los elementos entren desde la derecha */
-    @keyframes entrar-derecha {
-        0% {
-            transform: translateX(130%) scale(1.1);
-            opacity: 0;
-        }
-
-        100% {
-            transform: translateX(0) scale(1);
-            opacity: 1;
-        }
-    }
-
-    /* Aplica la animación de entrada desde la izquierda */
-    .entrar-izquierda {
-        animation: entrar-izquierda 0.7s ease-out;
-    }
-
-    /* Aplica la animación de entrada desde la derecha */
-    .entrar-derecha {
-        animation: entrar-derecha 0.7s ease-out;
-    }
-
-    /* Animación para mostrar resultados con efecto de pop */
-    @keyframes resultado-pop {
-        0% {
-            transform: scale(0.9) translateY(15px);
-            opacity: 0;
-        }
-
-        60% {
-            transform: scale(1.03) translateY(0);
-            opacity: 1;
-        }
-
-        100% {
-            transform: scale(1) translateY(0);
-            opacity: 1;
-        }
-    }
-
-    /* ------ MERCADO ------ */
-    /* Diseño en grid para los productos del mercado */
+/* ------ RESPONSIVE ------ */
+/* Ajustes para pantallas (1024px) */
+@media (max-width: 1024px) {
     #market-container {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: var(--spacing-large);
-        margin-bottom: 18px;
-    }
-
-    /* Estilo de las tarjetas de productos */
-    .product-item {
-        background: var(--color-white);
-        border: 3px solid var(--color-brown-dark);
-        border-radius: var(--radius-medium);
-        box-shadow: 0 4px 0 var(--color-brown-light);
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: space-between;
-        padding: 17px 10px 12px 10px;
-        min-height: 245px;
-        box-sizing: border-box;
-        transition: box-shadow 0.2s, background 0.2s, border 0.2s;
-    }
-
-    /* Hover y selección de productos */
-    .product-item.selected,
-    .product-item:hover {
-        background: var(--color-yellow);
-        border-width: 4px;
-        box-shadow: 0 8px 20px #311b02a0;
-    }
-
-    /* Animación para productos seleccionados */
-    .product-item.selected {
-        animation: producto-seleccionado 0.25s ease-out;
-    }
-
-    /* Estilo de las imágenes de los productos */
-    .product-item img {
-        width: 85px;
-        max-height: 88px;
-        margin: 6px 0 10px 0;
-        border-radius: var(--radius-small);
-    }
-
-    /* Estilo del título de los productos */
-    .product-item h4 {
-        margin: 2px 0;
-        font-size: 18px;
-    }
-
-    /* Estilo del texto descriptivo de los productos */
-    .product-item p {
-        margin: 1px 0;
-        text-align: center;
-    }
-
-    /* Estilo de los botones de los productos */
-    .product-item button {
-        background: var(--color-yellow);
-        border: 2px solid var(--color-brown-dark);
-        border-radius: var(--radius-small);
-        color: var(--color-black);
-        font-weight: bold;
-        font-size: 15px;
-        margin-top: 7px;
-        padding: 6px 16px;
-        cursor: pointer;
-        transition: background 0.18s;
-    }
-
-    /* Hover en los botones */
-    .product-item button:hover {
-        background: var(--color-brown-dark);
-        color: var(--color-yellow);
-    }
-
-    /* ------ ENEMIGOS ------ */
-    /* Diseño en grid para los enemigos */
-    #enemies-container {
-        display: grid;
-        gap: 24px;
         grid-template-columns: repeat(2, 1fr);
-        background: var(--color-brown-dark);
-        padding: 22px 18px;
-        border-radius: 14px;
-        margin-bottom: 16px;
-        box-sizing: border-box;
     }
 
-    /* Estilo de las tarjetas de enemigos */
-    .enemy-item {
-        background: var(--color-white);
-        border: 3px solid var(--color-brown-dark);
-        border-radius: var(--radius-medium);
-        text-align: center;
-        padding: 13px;
-        min-height: 194px;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        box-shadow: 0 2px 9px #311b0260;
-        box-sizing: border-box;
+    #enemies-container {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* Ajustes para pantallas (720px) */
+@media (max-width: 720px) {
+    #market-container {
+        grid-template-columns: repeat(2, 1fr);
     }
 
-    /* Estilo de las imágenes de los enemigos */
-    .enemy-item img {
-        width: 88px;
-        min-height: 80px;
-        margin-bottom: 5px;
-        object-fit: contain;
+    #enemies-container {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Ajustes para pantallas (360px) */
+@media (max-width: 360px) {
+    #market-container {
+        grid-template-columns: 1fr;
     }
 
-    /* Estilo del título de los enemigos */
-    .enemy-item h3 {
-        font-size: 18px;
-        color: var(--color-brown-dark);
-        margin-bottom: 6px;
+    #player-image {
+        margin: 16px auto 8px auto;
     }
 
-    /* Estilo del texto descriptivo de los enemigos */
-    .enemy-item p {
-        font-size: var(--font-size-text);
-        margin-bottom: 2px;
-        color: #26190a;
+    .stats-grid {
+        grid-template-columns: 1fr;
     }
 
-    /* ------ BATALLA ------- */
-    /* Diseño de la fila de batalla: jugador vs enemigo */
-    .battle-vs-row {
-        display: flex;
-        justify-content: space-around;
-        align-items: center;
-        background: var(--color-brown-light);
-        border-radius: 10px;
-        border: 4px solid var(--color-brown-dark);
-        margin-top: 18px;
-        padding: 16px 8px;
-        box-sizing: border-box;
-    }
-
-    /* Estilo de las imágenes de los avatares en batalla */
-    .battle-vs-avatar {
-        width: 135px;
-        height: 135px;
-        border-radius: 13px;
-        object-fit: contain;
-    }
-
-    /* Estilo del texto vs en las batallas */
-    .battle-vs-vs {
-        font-size: 32px;
-        font-family: var(--font-main);
-        font-weight: bold;
-        color: var(--color-brown-dark);
-    }
-
-    /* Estilo del cuadro de resultados de la batalla */
-    .battle-item {
-        background: var(--color-brown-dark);
-        color: var(--color-yellow);
-        border-radius: 12px;
-        font-size: 22px;
-        margin: 22px auto 10px auto;
-        width: 95%;
-        text-align: center;
-        border: none;
-        box-shadow: 0 2px 22px #0002;
-        padding: 26px 0;
-        box-sizing: border-box;
-    }
-
-    /* ------ RESULTADOS ------- */
-    /* Estilo del cuadro de resultados finales */
-    #results-container {
-        background: var(--color-brown-dark);
-        color: var(--color-yellow);
-        border-radius: 12px;
-        margin: 36px auto 8px auto;
-        width: 95%;
-        text-align: center;
-        font-size: 24px;
-        box-shadow: 0 6px 32px #1b090230;
-        padding: 52px 10px 44px 10px;
-        box-sizing: border-box;
-        animation: resultado-pop 0.6s ease-out;
-    }
-
-    /* ------ INVENTARIO ------ */
-    /* Diseño del contenedor del inventario */
     #inventory-container {
-        background: var(--color-brown-dark);
-        border: 4px solid #312211;
-        border-radius: 6px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        gap: 8px;
-        min-height: 65px;
-        margin: 18px auto 10px auto;
-        max-width: 540px;
-        padding: 12px 8px;
-        box-sizing: border-box;
+        max-width: 320px;
     }
 
-    /* Estilo de los espacios del inventario */
-    #inventory-container .item {
-        width: 60px;
-        height: 65px;
-        background: var(--color-brown-light);
-        border-radius: var(--radius-small);
-        border: 2.5px solid #a08453;
-        box-shadow: 0 2px 13px #e6ca9a7a inset;
-        display: flex;
-        align-items: center;
-        justify-content: center;
+    button {
+        min-width: 80px;
+        font-size: 15px;
     }
 
-    /* Estilo de las imágenes de los ítems en el inventario */
-    #inventory-container .item img {
-        max-width: 90%;
-        max-height: 90%;
-        object-fit: contain;
-        display: block;
-        border: none;
-        background: transparent;
-        transition: transform 0.25s;
+    .product-item,
+    .enemy-item {
+        padding: 10px 6px;
     }
+}
 
-    /* Hover en los ítems */
-    #inventory-container .item img:hover {
-        transform: scale(1.12) rotate(-8deg);
-        filter: brightness(1.2) drop-shadow(0 0 10px #fff4);
-    }
+/* Estilo del scrollbar */
+::-webkit-scrollbar-thumb {
+    background: var(--color-brown-dark);
+    border-radius: 10px;
+}
 
-    /* ----- CAJAS INFO ----- */
-    /* Estilo de las cajas de información y estadísticas */
-    .stats-box,
-    .info-box {
-        background: var(--color-brown-light);
-        border-radius: var(--radius-small);
-        margin: 14px 0;
-        border: 2.5px solid var(--color-brown-dark);
-        color: var(--color-brown-dark);
-        box-shadow: 0 1px 10px #9c843320;
-        padding: 15px 8px;
-        text-align: center;
-        box-sizing: border-box;
-    }
-
-    /* ----- BOTONES ----- */
-    /* Estilo general de los botones */
-    button,
-    .btn {
-        background: var(--color-yellow);
-        color: var(--color-brown-dark);
-        border: 2px solid var(--color-brown-dark);
-        border-radius: 7px;
-        font-family: var(--font-main);
-        font-size: 17px;
-        box-shadow: 0 2px 1px #efd66260;
-        margin-top: 8px;
-        min-width: 100px;
-        padding: 7px 10px;
-        box-sizing: border-box;
-        transition: background 0.18s, color 0.13s, transform 0.15s;
-    }
-
-    /* Hover y focus en los botones */
-    button:hover,
-    .btn:hover,
-    button:focus {
-        background: var(--color-brown-dark);
-        color: var(--color-yellow);
-        transform: scale(1.08);
-    }
-
-    /* ------ RESPONSIVE ------ */
-    /* Ajustes para pantallas (1024px) */
-    @media (max-width: 1024px) {
-        #market-container {
-            grid-template-columns: repeat(2, 1fr);
-        }
-
-        #enemies-container {
-            grid-template-columns: repeat(2, 1fr);
-        }
-    }
-
-    /* Ajustes para pantallas (720px) */
-    @media (max-width: 720px) {
-        #market-container {
-            grid-template-columns: repeat(2, 1fr);
-        }
-
-        #enemies-container {
-            grid-template-columns: 1fr;
-        }
-    }
-
-    /* Ajustes para pantallas (360px) */
-    @media (max-width: 360px) {
-        #market-container {
-            grid-template-columns: 1fr;
-        }
-
-        #player-image {
-            margin: 16px auto 8px auto;
-        }
-
-        .stats-grid {
-            grid-template-columns: 1fr;
-        }
-
-        #inventory-container {
-            max-width: 320px;
-        }
-
-        button {
-            min-width: 80px;
-            font-size: 15px;
-        }
-
-        .product-item,
-        .enemy-item {
-            padding: 10px 6px;
-        }
-    }
-
-    /* Estilo del scrollbar */
-    ::-webkit-scrollbar-thumb {
-        background: var(--color-brown-dark);
-        border-radius: 10px;
-    }
-
-    /* Fondo del scrollbar */
-    ::-webkit-scrollbar {
-        width: 8px;
-        background: var(--color-brown-light);
-    }
+/* Fondo del scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+    background: var(--color-brown-light);
+}
