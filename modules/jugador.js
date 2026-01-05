@@ -13,13 +13,13 @@ export class Jugador {
         this.nombre = nombre;
         this.avatar = avatar;
 
-        // Stats base del formulario
+        // Stats base 
         this.vidaMax = vida;
         this.vida = vida;
         this.ataqueBase = ataque;
         this.defensaBase = defensa;
 
-        // Nuevo requisito: Dinero inicial
+        // Dinero inicial
         this.dinero = 500;
 
         this.inventario = [];
@@ -34,13 +34,13 @@ export class Jugador {
         this.puntos += cantidad;
     }
 
-    // AHORA el ataque es: lo que pusiste en el formulario + las armas
+    //ahora el ataque es el form + las armas
     obtenerAtaqueTotal() {
         let ataqueObjetos = this.inventario.reduce((acc, obj) => acc + (obj.tipo === 'arma' ? obj.bonus.ataque : 0), 0);
         return this.ataqueBase + ataqueObjetos;
     }
 
-    // AHORA la defensa es: lo que pusiste en el formulario + las armaduras
+    // ahora la defensa es el form + las armaduras
     obtenerDefensaTotal() {
         let defensaObjetos = this.inventario.reduce((acc, obj) => acc + (obj.tipo === 'armadura' ? obj.bonus.defensa : 0), 0);
         return this.defensaBase + defensaObjetos;

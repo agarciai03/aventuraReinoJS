@@ -1,7 +1,7 @@
 // Archivo: utils/constants.js
 
 /** Oro inicial del jugador */
-export const Dinero = 500;
+export const ORO_INICIAL = 500;
 /** Vida inicial del jugador */
 export const VIDA_JUGADOR = 100;
 /** Puntos necesarios para ser Veterano */
@@ -60,6 +60,3 @@ export const jefeFinal = {
     multiplicador: 1.2,
     avatar: 'img/finalboss.png'
 };
-
-export const MONEDAS_ENEMIGO = 5;
-export const MONEDAS_JEFE = 10;
