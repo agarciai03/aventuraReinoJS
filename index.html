@@ -17,34 +17,29 @@
     <main>
         <!-- ESCENA INICIAL DEL JUGADOR -->
         <section id="initial" class="scene active">
-            <h2>Estado inicial del jugador</h2>
-
+            <h2>Crear Personaje</h2>
             <div class="initial-layout">
                 <img id="player-image" src="img/personaje.png" alt="Jugador">
 
-                <div class="stats-grid">
-                    <div class="stats-card">
-                        <p><strong>Nombre:</strong> Aventurero</p>
-                    </div>
-                    <div class="stats-card">
-                        <p><strong>Vida:</strong> <span id="stat-vida-inicial">100</span></p>
-                    </div>
-                    <div class="stats-card">
-                        <p><strong>Ataque:</strong> <span id="stat-ataque-inicial">0</span></p>
-                    </div>
-                    <div class="stats-card">
-                        <p><strong>Defensa:</strong> <span id="stat-defensa-inicial">0</span></p>
-                    </div>
-                    <div class="stats-card">
-                        <p><strong>Oro:</strong> <span id="stat-oro-inicial">500</span></p>
-                    </div>
-                    <div class="stats-card">
-                        <p><strong>Items:</strong> <span id="stat-items-inicial">0</span></p>
-                    </div>
+                <div class="form-container">
+                    <p>Reparte tus puntos (Máximo total: 110)</p>
+
+                    <label>Nombre:</label>
+                    <input type="text" id="inp-nombre" placeholder="Ej: Heroe" required>
+                    <small>Empieza mayúscula, solo letras/espacios, max 20 chars.</small>
+
+                    <label>Vida (Min 100):</label>
+                    <input type="number" id="inp-vida" value="100" min="100">
+
+                    <label>Ataque:</label>
+                    <input type="number" id="inp-ataque" value="0" min="0">
+
+                    <label>Defensa:</label>
+                    <input type="number" id="inp-defensa" value="0" min="0">
+
+                    <button id="btn-start-game" class="btn">Comenzar Aventura</button>
                 </div>
             </div>
-
-            <button id="btn-to-market" class="btn">Ir al mercado</button>
         </section>
 
         <!-- ESCENA MERCADO -->
@@ -74,7 +69,7 @@
 
                 <div class="stats-grid">
                     <div class="stats-card">
-                        <p><strong>Nombre:</strong> Aventurero</p>
+                        <p><strong>Nombre:</strong> <span id="stat-nombre-actual">Aventurero</span></p>
                     </div>
                     <div class="stats-card">
                         <p><strong>Vida:</strong> <span id="stat-vida-actual">100</span></p>
@@ -116,6 +111,7 @@
         <div id="results" class="scene">
             <h2>Resultados finales</h2>
             <div id="results-container" class="stats-box"></div>
+            <button id="btn-show-ranking" class="btn">Ver Ranking en Consola</button>
             <button id="btn-restart">Reiniciar aventura</button>
         </div>
     </main>
