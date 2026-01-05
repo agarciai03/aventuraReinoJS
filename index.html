@@ -105,6 +105,11 @@
             <div id="battles-container"></div>
             <button id="btn-next-battle" class="hidden">Siguiente batalla</button>
             <button id="btn-to-results" class="hidden">Ver resultados</button>
+            <div id="contenedor-monedas">
+                <img src="img/moneda.png" class="moneda m1" alt="Moneda">
+                <img src="img/moneda.png" class="moneda m2" alt="Moneda">
+                <img src="img/moneda.png" class="moneda m3" alt="Moneda">
+            </div>
         </div>
 
         <!-- ESCENA RESULTADOS FINALES -->
@@ -113,6 +118,40 @@
             <div id="results-container" class="stats-box"></div>
             <button id="btn-show-ranking" class="btn">Ver Ranking en Consola</button>
             <button id="btn-restart">Reiniciar aventura</button>
+            <div id="results" class="scene">
+                <h2>Resultados finales</h2>
+                <div id="results-container" class="stats-box"></div>
+
+                <h3>Ranking de Héroes</h3>
+                <table class="tabla-ranking">
+                    <thead>
+                        <tr>
+                            <th>Nombre</th>
+                            <th>Puntos</th>
+                            <th>Monedas</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Guerrero Pro</td>
+                            <td>1500</td>
+                            <td>800</td>
+                        </tr>
+                        <tr>
+                            <td>Mago Novato</td>
+                            <td>1200</td>
+                            <td>500</td>
+                        </tr>
+                        <tr>
+                            <td>Tu Jugador</td>
+                            <td>950</td>
+                            <td>300</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <button id="btn-restart">Reiniciar aventura</button>
+            </div>
         </div>
     </main>
     <footer>
@@ -125,6 +164,10 @@
             <div class="item"><img src="img/" alt="Vacío"></div>
             <div class="item"><img src="img/" alt="Vacío"></div>
             <div class="item"><img src="img/" alt="Vacío"></div>
+        </div>
+        <div id="monedero-defensa">
+            <img src="img/monedero.png" alt="Saco de oro">
+            <span class="texto-dinero">500</span>
         </div>
     </footer>
 
