@@ -641,3 +641,155 @@ button:focus {
     width: 8px;
     background: var(--color-brown-light);
 }
+
+/* Contenedor general */
+.summary-container,
+.ranking-container {
+    max-width: 500px;
+    margin: 0 auto;
+    text-align: center;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+/* RESULTADO */
+.success-box,
+.failure-box {
+    padding: 20px;
+    border-radius: 12px;
+    margin-bottom: 20px;
+    color: white;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+}
+
+.success-box {
+    background-color: #2e7d32;
+    border: 3px solid #4caf50;
+}
+
+.failure-box {
+    background-color: #c62828;
+    border: 3px solid #ef5350;
+}
+
+.machine-text {
+    margin: 10px 0;
+    font-size: 1.8rem;
+    text-transform: uppercase;
+    text-shadow: 2px 2px 0px #000;
+}
+
+/* ESTADISTICAS */
+.stats-box-final {
+    background-color: rgba(40, 30, 10, 0.9);
+    border: 2px solid #ffd700;
+    border-radius: 10px;
+    padding: 20px;
+    color: #ffd700;
+    margin-bottom: 20px;
+}
+
+.stats-box-final h3 {
+    border-bottom: 1px solid #ffd700;
+    padding-bottom: 10px;
+    margin-bottom: 15px;
+}
+
+/* lista de stats */
+.stat-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(255, 215, 0, 0.3);
+    font-size: 0.95rem;
+}
+
+/* ranking final */
+.final-rank-row {
+    background-color: #ffd700;
+    color: #000;
+    font-weight: bold;
+    padding: 10px;
+    border-radius: 5px;
+    margin-top: 15px;
+    display: flex;
+    justify-content: space-between;
+    text-transform: uppercase;
+}
+
+/* --- TABLA DE RANKING --- */
+.table-box {
+    background-color: rgba(0, 0, 0, 0.85);
+    border: 2px solid #888;
+    border-radius: 10px;
+    padding: 10px;
+    margin-bottom: 20px;
+}
+
+.table-title {
+    color: #ffd700;
+    margin-bottom: 10px;
+}
+
+.tabla-ranking {
+    width: 100%;
+    border-collapse: collapse;
+    color: white;
+}
+
+.tabla-ranking th {
+    background-color: #444;
+    padding: 10px;
+    color: #ffd700;
+}
+
+.tabla-ranking td {
+    padding: 10px;
+    border-bottom: 1px solid #555;
+}
+
+/* medallas del ranking */
+.rank-1 {
+    color: #ffd700;
+    font-weight: bold;
+}
+
+.rank-2 {
+    color: #c0c0c0;
+    font-weight: bold;
+}
+
+.rank-3 {
+    color: #cd7f32;
+    font-weight: bold;
+}
+
+/* Ver Ranking */
+.btn-yellow {
+    background-color: #ffd700;
+    color: #000;
+    border: none;
+    padding: 12px 24px;
+    font-size: 1rem;
+    font-weight: bold;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+/* Jugar de nuevo */
+.btn-green {
+    background-color: #4caf50;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    font-size: 1rem;
+    font-weight: bold;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.btn-yellow:hover,
+.btn-green:hover {
+    transform: scale(1.05);
+    opacity: 0.9;
+}

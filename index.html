@@ -114,45 +114,48 @@
 
         <!-- ESCENA RESULTADOS FINALES -->
         <div id="results" class="scene">
-            <h2>Resultados finales</h2>
-            <div id="results-container" class="stats-box"></div>
+            <div class="summary-container">
 
-            <h3>Ranking de Héroes</h3>
-            <table class="tabla-ranking">
-                <thead>
-                    <tr>
-                        <th>Nombre</th>
-                        <th>Puntos</th>
-                        <th>Monedas</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>Goblin</td>
-                        <td>1500</td>
-                        <td>800</td>
-                    </tr>
-                    <tr>
-                        <td>Orco</td>
-                        <td>1200</td>
-                        <td>500</td>
-                    </tr>
-                    <tr>
-                        <td>Dragón</td>
-                        <td>950</td>
-                        <td>300</td>
-                    </tr>
-                    <tr>
-                        <td>Jefe final</td>
-                        <td>1400</td>
-                        <td>600</td>
-                    </tr>
-                </tbody>
-            </table>
+                <div id="result-header" class="success-box">
+                    <h2 id="res-title">¡Aventura Completada!</h2>
+                    <h1 id="res-msg" class="machine-text">¡ERES UNA MÁQUINA!</h1>
+                    <h3 id="score-big">0 puntos</h3>
+                </div>
 
-            <button id="btn-show-ranking" class="btn">Ver Ranking en Consola</button>
-            <button id="btn-restart">Reiniciar aventura</button>
+                <div class="stats-box-final">
+                    <h3>📊 Resumen Final</h3>
+                    <div class="stats-list" id="final-stats-list">
+                    </div>
+                    <div class="final-rank-row" id="final-rank-row">
+                    </div>
+                </div>
+
+                <button id="btn-show-ranking" class="btn-yellow">Ver Ranking</button>
+            </div>
         </div>
+
+        <div id="ranking-scene" class="scene">
+            <div class="ranking-container">
+                <h2>🥉 Ranking de Jugadores</h2>
+
+                <div class="table-box">
+                    <h3 class="table-title">Tabla de Puntuaciones</h3>
+                    <table class="tabla-ranking">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Nombre</th>
+                                <th>Puntuación</th>
+                                <th>Monedas</th>
+                            </tr>
+                        </thead>
+                        <tbody id="ranking-body">
+                        </tbody>
+                    </table>
+                </div>
+
+                <button id="btn-new-game" class="btn-green">Empezar Nueva Aventura</button>
+            </div>
         </div>
     </main>
     <footer>

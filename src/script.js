@@ -400,58 +400,125 @@ function siguienteBatalla() {
 }
 
 /**
- * Calcula el ranking final, guarda el resultado en LocalStorage y muestra la pantalla final.
- * Suma el oro restante a la puntuación total.
+ * Calcula los resultados finales, guarda la partida en el historial y muestra la pantalla de resumen.
+ * Determina si el jugador ganó o perdió y actualiza la interfaz acorde a ello.
+ * * @returns {void} No devuelve ningún valor, modifica el DOM directamente.
  */
 function mostrarResultados() {
   let listaLucha = enemigos.concat([jefe]);
-  let ranking = "Novato";
+  let rangoObtenido = "Novato";
 
-  // Sumar el oro restante a la puntuación final 
-  jugador.puntos += jugador.dinero;
+  const cajaHeader = document.getElementById('result-header');
+  const titulo = document.getElementById('res-title');
+  const mensaje = document.getElementById('res-msg');
 
-  if (jugador.vida > 0 && rondaActual === listaLucha.length && resultadosBatallas[resultadosBatallas.length - 1].ganador === "jugador") {
-    ranking = obtenerRanking(jugador.puntos, UMBRAL_VETERANO);
+  if (jugador.vida > 0) {
+    jugador.puntos += jugador.dinero;
+    cajaHeader.className = "success-box";
+    titulo.innerText = "¡Aventura Completada!";
+    mensaje.innerText = "¡ERES UNA PRO!";
+
+    try {
+      rangoObtenido = obtenerRanking(jugador.puntos, UMBRAL_VETERANO);
+    } catch (e) {
+      rangoObtenido = jugador.puntos > 600 ? "PRO" : "Aventurero";
+    }
+
+    // Confetti solo si gana
+    if (typeof confetti === "function") {
+      confetti({ particleCount: 200, spread: 70, origin: { y: 0.6 } });
+    }
+
+  } else {
+    //si pierdo
+    cajaHeader.className = "failure-box";
+    titulo.innerText = "¡Fin de la partida!";
+    mensaje.innerText = "HAS SIDO DERROTADO, ERES UN VETERANO";
+    rangoObtenido = "Derrotado";
   }
 
-  //guardo en localStorage
-  const registroRanking = {
+  // GUARDADO EN LOCALSTORAGE
+  const registroActual = {
     nombre: jugador.nombre,
     puntuacion: jugador.puntos,
-    monedasTotales: jugador.dinero
+    monedas: jugador.dinero,
+    fecha: new Date().toLocaleDateString()
   };
-  localStorage.setItem('rankingAventura', JSON.stringify(registroRanking));
 
-  let mensaje = mostrarMensajeRanking(ranking);
-  document.getElementById('results-container').innerHTML = `
-    <h3>${ranking}</h3>
-    <p><strong>Puntos totales (Score + Oro):</strong> ${jugador.puntos}</p>
-    <p><strong>Oro final:</strong> ${jugador.dinero}</p>
-    <p><strong>Vida final:</strong> ${jugador.vida}</p>
-    <p>${mensaje}</p>
+  let historial = JSON.parse(localStorage.getItem('rankingAventura')) || [];
+  if (!Array.isArray(historial)) historial = [];
+  historial.push(registroActual);
+  localStorage.setItem('rankingAventura', JSON.stringify(historial));
+
+  // RESTO DE DATOS 
+  document.getElementById('score-big').innerText = `${jugador.puntos} puntos`;
+
+  const listaStats = document.getElementById('final-stats-list');
+  listaStats.innerHTML = `
+      <div class="stat-row"><span class="label">Nombre</span> <span class="value">${jugador.nombre}</span></div>
+      <div class="stat-row"><span class="label">Puntos Totales</span> <span class="value">${jugador.puntos}</span></div>
+      <div class="stat-row"><span class="label">Dinero Final</span> <span class="value">${jugador.dinero}</span></div>
+      <div class="stat-row"><span class="label">Batallas Ganadas</span> <span class="value">${rondaActual}/${listaLucha.length}</span></div>
+      <div class="stat-row"><span class="label">Vida Final</span> <span class="value">${jugador.vida}/100</span></div>
+      <div class="stat-row"><span class="label">Ataque Total</span> <span class="value">${jugador.obtenerAtaqueTotal()}</span></div>
+      <div class="stat-row"><span class="label">Defensa Total</span> <span class="value">${jugador.obtenerDefensaTotal()}</span></div>
+      <div class="stat-row"><span class="label">Objetos Comprados</span> <span class="value">${jugador.inventario.length}</span></div>
   `;
 
-  //Confetti
-  if (typeof confetti === "function" && jugador.vida > 0) {
-    confetti({ particleCount: 200, spread: 70, origin: { y: 0.6 } });
-  }
+  const pieRank = document.getElementById('final-rank-row');
+  pieRank.innerHTML = `
+      <span class="label">🏆 Nivel Final</span> <span class="value-rank">${rangoObtenido}</span>
+  `;
 
   mostrarEscena('results');
 }
 
+/**
+ * Obtiene el historial de partidas del almacenamiento local, lo ordena y genera la tabla de ranking.
+ * * @returns {void} Renderiza la tabla en el HTML.
+ */
+function mostrarPantallaRanking() {
+  let historial = JSON.parse(localStorage.getItem('rankingAventura')) || [];
+
+  if (!Array.isArray(historial)) historial = [];
+
+  historial.sort((a, b) => b.puntuacion - a.puntuacion);
+
+  const tbody = document.getElementById('ranking-body');
+  tbody.innerHTML = "";
+
+  historial.forEach((partida, index) => {
+    let fila = document.createElement('tr');
+
+    let clasePosicion = "";
+    if (index === 0) clasePosicion = "rank-1";
+    if (index === 1) clasePosicion = "rank-2";
+    if (index === 2) clasePosicion = "rank-3";
+
+    let medalla = "#" + (index + 1);
+    if (index === 0) medalla = "🥇";
+    if (index === 1) medalla = "🥈";
+    if (index === 2) medalla = "🥉";
+
+    fila.innerHTML = `
+            <td>${medalla}</td>
+            <td class="${clasePosicion}"><strong>${partida.nombre}</strong></td>
+            <td>${partida.puntuacion}</td>
+            <td class="coin-cell">${partida.monedas} 💰</td>
+        `;
+    tbody.appendChild(fila);
+  });
+
+  mostrarEscena('ranking-scene');
+}
+
 // EVENT 
 
-// Boton para ver el ranking por consola 
-document.getElementById('btn-show-ranking').onclick = () => {
-  const data = localStorage.getItem('rankingAventura');
-  if (data) {
-    console.table(JSON.parse(data));
-    alert("Mira la consola (F12) para ver el ranking.");
-  } else {
-    console.log("No hay ranking guardado aún.");
-    alert("No hay ranking guardado.");
-  }
-};
+// Boton en la pantalla de Resumen Final para ir al Ranking
+document.getElementById('btn-show-ranking').onclick = mostrarPantallaRanking;
+
+// Boton en la pantalla de Ranking para reiniciar juego
+document.getElementById('btn-new-game').onclick = () => location.reload();
 
 // asigno eventos a botones 
 document.getElementById('btn-buy').onclick = comprar;
@@ -460,7 +527,8 @@ document.getElementById('btn-to-enemies').onclick = () => { mostrarEscena('enemi
 document.getElementById('btn-to-battles').onclick = cargarBatallas;
 document.getElementById('btn-next-battle').onclick = siguienteBatalla;
 document.getElementById('btn-to-results').onclick = mostrarResultados;
-document.getElementById('btn-restart').onclick = () => location.reload();
+const btnRestartOld = document.getElementById('btn-restart');
+if (btnRestartOld) btnRestartOld.onclick = () => location.reload();
 
-// iniciar apliacacion
+// iniciar aplicacion
 iniciarAplicacion();
