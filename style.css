@@ -642,154 +642,83 @@ button:focus {
     background: var(--color-brown-light);
 }
 
-/* Contenedor general */
-.summary-container,
-.ranking-container {
-    max-width: 500px;
-    margin: 0 auto;
-    text-align: center;
-    font-family: Arial, Helvetica, sans-serif;
-}
-
-/* RESULTADO */
-.success-box,
-.failure-box {
-    padding: 20px;
-    border-radius: 12px;
-    margin-bottom: 20px;
-    color: white;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
-}
-
-.success-box {
-    background-color: #2e7d32;
-    border: 3px solid #4caf50;
-}
-
-.failure-box {
-    background-color: #c62828;
-    border: 3px solid #ef5350;
-}
-
-.machine-text {
-    margin: 10px 0;
-    font-size: 1.8rem;
-    text-transform: uppercase;
-    text-shadow: 2px 2px 0px #000;
-}
-
-/* ESTADISTICAS */
-.stats-box-final {
-    background-color: rgba(40, 30, 10, 0.9);
-    border: 2px solid #ffd700;
-    border-radius: 10px;
-    padding: 20px;
-    color: #ffd700;
-    margin-bottom: 20px;
-}
-
-.stats-box-final h3 {
-    border-bottom: 1px solid #ffd700;
-    padding-bottom: 10px;
-    margin-bottom: 15px;
-}
-
-/* lista de stats */
-.stat-row {
+#results.active,
+#ranking-scene.active {
     display: flex;
-    justify-content: space-between;
-    padding: 8px 0;
-    border-bottom: 1px solid rgba(255, 215, 0, 0.3);
-    font-size: 0.95rem;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: rgb(0, 0, 0);
+    width: 100%;
+    min-height: 500px;
+    border-radius: 10px;
 }
 
-/* ranking final */
-.final-rank-row {
-    background-color: #ffd700;
-    color: #000;
+.titulo-rpg {
+    color: black;
+    font-size: 2.5rem;
+    margin-bottom: 30px;
     font-weight: bold;
-    padding: 10px;
-    border-radius: 5px;
-    margin-top: 15px;
-    display: flex;
-    justify-content: space-between;
-    text-transform: uppercase;
+    text-shadow: none;
 }
 
-/* --- TABLA DE RANKING --- */
-.table-box {
-    background-color: rgba(0, 0, 0, 0.85);
-    border: 2px solid #888;
-    border-radius: 10px;
-    padding: 10px;
-    margin-bottom: 20px;
-}
-
-.table-title {
-    color: #ffd700;
+.caja-mensaje h1 {
+    font-size: 2rem;
     margin-bottom: 10px;
+    font-weight: bold;
+    text-shadow: 2px 2px 0px #333;
 }
 
-.tabla-ranking {
+.caja-mensaje p {
+    font-size: 1.5rem;
+    color: #000000;
+    font-weight: bold;
+    margin-bottom: 40px;
+}
+
+.marco-tabla {
+    border: 2px solid white;
+    width: 90%;
+    max-width: 600px;
+    margin-bottom: 30px;
+}
+
+.scroll-tabla {
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.tabla-rpg {
     width: 100%;
     border-collapse: collapse;
-    color: white;
+    font-size: 1.1rem;
+    color: black;
+    text-align: center;
 }
 
-.tabla-ranking th {
-    background-color: #444;
+.tabla-rpg thead th {
+    background-color: #e8d92e;
+    padding: 12px;
+    position: sticky;
+    top: 0;
+    border-bottom: 2px solid white;
+}
+
+.tabla-rpg td {
     padding: 10px;
-    color: #ffd700;
+    border-bottom: 1px solid white;
 }
 
-.tabla-ranking td {
-    padding: 10px;
-    border-bottom: 1px solid #555;
-}
 
-/* medallas del ranking */
-.rank-1 {
-    color: #ffd700;
-    font-weight: bold;
-}
-
-.rank-2 {
-    color: #c0c0c0;
-    font-weight: bold;
-}
-
-.rank-3 {
-    color: #cd7f32;
-    font-weight: bold;
-}
-
-/* Ver Ranking */
-.btn-yellow {
-    background-color: #ffd700;
-    color: #000;
+.boton-rpg {
+    background-color: #e8d92e;
+    color: black;
     border: none;
-    padding: 12px 24px;
-    font-size: 1rem;
+    padding: 12px 30px;
+    font-size: 1.1rem;
     font-weight: bold;
     border-radius: 5px;
     cursor: pointer;
-    transition: transform 0.2s;
-}
+    font-family: inherit;
 
-/* Jugar de nuevo */
-.btn-green {
-    background-color: #4caf50;
-    color: white;
-    border: none;
-    padding: 12px 24px;
-    font-size: 1rem;
-    font-weight: bold;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-.btn-yellow:hover,
-.btn-green:hover {
-    transform: scale(1.05);
-    opacity: 0.9;
 }

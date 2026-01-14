@@ -400,127 +400,81 @@ function siguienteBatalla() {
 }
 
 /**
- * Calcula los resultados finales, guarda la partida en el historial y muestra la pantalla de resumen.
- * Determina si el jugador ganó o perdió y actualiza la interfaz acorde a ello.
- * * @returns {void} No devuelve ningún valor, modifica el DOM directamente.
+ * Calcula la puntuación final sumando el dinero (si el jugador vive), determina el rango alcanzado (PRO o Veterano),
+ * guarda el registro de la partida en el LocalStorage y actualiza la interfaz con el resultado.
+ * @returns {void} No devuelve valor, modifica el DOM y el almacenamiento local.
  */
 function mostrarResultados() {
-  let listaLucha = enemigos.concat([jefe]);
-  let rangoObtenido = "Novato";
-
-  const cajaHeader = document.getElementById('result-header');
-  const titulo = document.getElementById('res-title');
-  const mensaje = document.getElementById('res-msg');
-
   if (jugador.vida > 0) {
     jugador.puntos += jugador.dinero;
-    cajaHeader.className = "success-box";
-    titulo.innerText = "¡Aventura Completada!";
-    mensaje.innerText = "¡ERES UNA PRO!";
-
-    try {
-      rangoObtenido = obtenerRanking(jugador.puntos, UMBRAL_VETERANO);
-    } catch (e) {
-      rangoObtenido = jugador.puntos > 600 ? "PRO" : "Aventurero";
-    }
-
-    // Confetti solo si gana
-    if (typeof confetti === "function") {
-      confetti({ particleCount: 200, spread: 70, origin: { y: 0.6 } });
-    }
-
-  } else {
-    //si pierdo
-    cajaHeader.className = "failure-box";
-    titulo.innerText = "¡Fin de la partida!";
-    mensaje.innerText = "HAS SIDO DERROTADO, ERES UN VETERANO";
-    rangoObtenido = "Derrotado";
   }
 
-  // GUARDADO EN LOCALSTORAGE
-  const registroActual = {
+  let textoRango = "";
+  if (jugador.vida > 0) {
+    textoRango = "El jugador ha logrado ser un PRO";
+    // Confetti solo si gana
+    if (typeof confetti === "function") {
+      confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
+    }
+  } else {
+    textoRango = "El jugador ha logrado ser Veterano";
+  }
+
+  document.getElementById('texto-rango').textContent = textoRango;
+  document.getElementById('texto-puntos').textContent = "Puntos totales: " + jugador.puntos;
+
+  const registro = {
     nombre: jugador.nombre,
-    puntuacion: jugador.puntos,
-    monedas: jugador.dinero,
-    fecha: new Date().toLocaleDateString()
+    puntos: jugador.puntos,
+    dinero: jugador.dinero
   };
 
   let historial = JSON.parse(localStorage.getItem('rankingAventura')) || [];
   if (!Array.isArray(historial)) historial = [];
-  historial.push(registroActual);
+
+  historial.push(registro);
   localStorage.setItem('rankingAventura', JSON.stringify(historial));
-
-  // RESTO DE DATOS 
-  document.getElementById('score-big').innerText = `${jugador.puntos} puntos`;
-
-  const listaStats = document.getElementById('final-stats-list');
-  listaStats.innerHTML = `
-      <div class="stat-row"><span class="label">Nombre</span> <span class="value">${jugador.nombre}</span></div>
-      <div class="stat-row"><span class="label">Puntos Totales</span> <span class="value">${jugador.puntos}</span></div>
-      <div class="stat-row"><span class="label">Dinero Final</span> <span class="value">${jugador.dinero}</span></div>
-      <div class="stat-row"><span class="label">Batallas Ganadas</span> <span class="value">${rondaActual}/${listaLucha.length}</span></div>
-      <div class="stat-row"><span class="label">Vida Final</span> <span class="value">${jugador.vida}/100</span></div>
-      <div class="stat-row"><span class="label">Ataque Total</span> <span class="value">${jugador.obtenerAtaqueTotal()}</span></div>
-      <div class="stat-row"><span class="label">Defensa Total</span> <span class="value">${jugador.obtenerDefensaTotal()}</span></div>
-      <div class="stat-row"><span class="label">Objetos Comprados</span> <span class="value">${jugador.inventario.length}</span></div>
-  `;
-
-  const pieRank = document.getElementById('final-rank-row');
-  pieRank.innerHTML = `
-      <span class="label">🏆 Nivel Final</span> <span class="value-rank">${rangoObtenido}</span>
-  `;
 
   mostrarEscena('results');
 }
 
 /**
- * Obtiene el historial de partidas del almacenamiento local, lo ordena y genera la tabla de ranking.
- * * @returns {void} Renderiza la tabla en el HTML.
+ * Recupera el historial de partidas desde el LocalStorage, ordena los registros por puntuación
+ * descendente y renderiza tanto la tabla visual en HTML como el listado por consola.
+ * @returns {void} Renderiza la tabla directamente en la interfaz.
  */
 function mostrarPantallaRanking() {
   let historial = JSON.parse(localStorage.getItem('rankingAventura')) || [];
-
   if (!Array.isArray(historial)) historial = [];
 
-  historial.sort((a, b) => b.puntuacion - a.puntuacion);
+  // Ordenar de mayor a menor
+  historial.sort((a, b) => b.puntos - a.puntuacion);
 
+  //CONSOLA 
+  console.log("=== RANKING DEL JUEGO ===");
+  console.table(historial);
+
+  // Pintar tabla visual
   const tbody = document.getElementById('ranking-body');
   tbody.innerHTML = "";
 
-  historial.forEach((partida, index) => {
-    let fila = document.createElement('tr');
-
-    let clasePosicion = "";
-    if (index === 0) clasePosicion = "rank-1";
-    if (index === 1) clasePosicion = "rank-2";
-    if (index === 2) clasePosicion = "rank-3";
-
-    let medalla = "#" + (index + 1);
-    if (index === 0) medalla = "🥇";
-    if (index === 1) medalla = "🥈";
-    if (index === 2) medalla = "🥉";
-
-    fila.innerHTML = `
-            <td>${medalla}</td>
-            <td class="${clasePosicion}"><strong>${partida.nombre}</strong></td>
-            <td>${partida.puntuacion}</td>
-            <td class="coin-cell">${partida.monedas} 💰</td>
+  historial.forEach(p => {
+    let tr = document.createElement('tr');
+    tr.innerHTML = `
+            <td>${p.nombre}</td>
+            <td>${p.puntos}</td>
+            <td>${p.dinero}</td>
         `;
-    tbody.appendChild(fila);
+    tbody.appendChild(tr);
   });
 
   mostrarEscena('ranking-scene');
 }
 
-// EVENT 
 
-// Boton en la pantalla de Resumen Final para ir al Ranking
+
 document.getElementById('btn-show-ranking').onclick = mostrarPantallaRanking;
-
-// Boton en la pantalla de Ranking para reiniciar juego
 document.getElementById('btn-new-game').onclick = () => location.reload();
-
-// asigno eventos a botones 
 document.getElementById('btn-buy').onclick = comprar;
 document.getElementById('btn-skip-market').onclick = () => { mostrarEscena('player'); mostrarEstadoActual(); };
 document.getElementById('btn-to-enemies').onclick = () => { mostrarEscena('enemies'); cargarEnemigos(); };
